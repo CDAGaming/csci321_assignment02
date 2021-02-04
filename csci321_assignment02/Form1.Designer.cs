@@ -1,7 +1,7 @@
 ﻿
 namespace csci321_assignment02
 {
-    partial class Form1
+    partial class App
     {
         /// <summary>
         /// Required designer variable.
@@ -55,7 +55,7 @@ namespace csci321_assignment02
             this.controlBox.TabStop = false;
             this.controlBox.Text = "Controls";
             // 
-            // Form1
+            // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -64,7 +64,7 @@ namespace csci321_assignment02
             this.Controls.Add(this.controlBox);
             this.Controls.Add(this.gameBox);
             this.Font = new System.Drawing.Font("Liberation Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "Form1";
+            this.Name = "App";
             this.Text = "CSCI321 Assignment 02 - Marble Game";
             this.ResumeLayout(false);
 
