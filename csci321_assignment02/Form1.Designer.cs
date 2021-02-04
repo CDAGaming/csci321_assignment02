@@ -32,6 +32,7 @@ namespace csci321_assignment02
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Name = "App";
             this.Text = "Form1";
         }
 
