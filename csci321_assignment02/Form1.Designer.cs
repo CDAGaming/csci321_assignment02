@@ -31,6 +31,11 @@ namespace csci321_assignment02
         {
             this.gameBox = new System.Windows.Forms.GroupBox();
             this.controlBox = new System.Windows.Forms.GroupBox();
+            this.rightButton = new System.Windows.Forms.Button();
+            this.leftButton = new System.Windows.Forms.Button();
+            this.downButton = new System.Windows.Forms.Button();
+            this.upButton = new System.Windows.Forms.Button();
+            this.controlBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // gameBox
@@ -46,6 +51,10 @@ namespace csci321_assignment02
             // 
             // controlBox
             // 
+            this.controlBox.Controls.Add(this.rightButton);
+            this.controlBox.Controls.Add(this.leftButton);
+            this.controlBox.Controls.Add(this.downButton);
+            this.controlBox.Controls.Add(this.upButton);
             this.controlBox.Font = new System.Drawing.Font("Liberation Mono", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.controlBox.ForeColor = System.Drawing.Color.LimeGreen;
             this.controlBox.Location = new System.Drawing.Point(427, 20);
@@ -54,6 +63,54 @@ namespace csci321_assignment02
             this.controlBox.TabIndex = 1;
             this.controlBox.TabStop = false;
             this.controlBox.Text = "Controls";
+            // 
+            // rightButton
+            // 
+            this.rightButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rightButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rightButton.Location = new System.Drawing.Point(145, 185);
+            this.rightButton.Name = "rightButton";
+            this.rightButton.Size = new System.Drawing.Size(50, 50);
+            this.rightButton.TabIndex = 3;
+            this.rightButton.Text = "🠖";
+            this.rightButton.UseVisualStyleBackColor = true;
+            this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
+            // 
+            // leftButton
+            // 
+            this.leftButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.leftButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.leftButton.Location = new System.Drawing.Point(45, 185);
+            this.leftButton.Name = "leftButton";
+            this.leftButton.Size = new System.Drawing.Size(50, 50);
+            this.leftButton.TabIndex = 2;
+            this.leftButton.Text = "🠔";
+            this.leftButton.UseVisualStyleBackColor = true;
+            this.leftButton.Click += new System.EventHandler(this.leftButton_Click);
+            // 
+            // downButton
+            // 
+            this.downButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.downButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.downButton.Location = new System.Drawing.Point(95, 235);
+            this.downButton.Name = "downButton";
+            this.downButton.Size = new System.Drawing.Size(50, 50);
+            this.downButton.TabIndex = 1;
+            this.downButton.Text = "🠗";
+            this.downButton.UseVisualStyleBackColor = true;
+            this.downButton.Click += new System.EventHandler(this.downButton_Click);
+            // 
+            // upButton
+            // 
+            this.upButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.upButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.upButton.Location = new System.Drawing.Point(95, 135);
+            this.upButton.Name = "upButton";
+            this.upButton.Size = new System.Drawing.Size(50, 50);
+            this.upButton.TabIndex = 0;
+            this.upButton.Text = "🠕";
+            this.upButton.UseVisualStyleBackColor = true;
+            this.upButton.Click += new System.EventHandler(this.upButton_Click);
             // 
             // App
             // 
@@ -66,6 +123,7 @@ namespace csci321_assignment02
             this.Font = new System.Drawing.Font("Liberation Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "App";
             this.Text = "CSCI321 Assignment 02 - Marble Game";
+            this.controlBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -74,6 +132,10 @@ namespace csci321_assignment02
 
         private System.Windows.Forms.GroupBox gameBox;
         private System.Windows.Forms.GroupBox controlBox;
+        private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.Button downButton;
+        private System.Windows.Forms.Button leftButton;
+        private System.Windows.Forms.Button rightButton;
     }
 }
 
