@@ -16,5 +16,26 @@ namespace csci321_assignment02
         {
             InitializeComponent();
         }
+
+        private void upButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("UP clicked");
+        }
+
+        private void downButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("DOWN clicked");
+        }
+
+        private void leftButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("LEFT clicked");
+        }
+
+        private void rightButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("RIGHT clicked");
+        }
+
     }
 }

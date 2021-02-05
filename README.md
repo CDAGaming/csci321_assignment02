@@ -12,7 +12,7 @@
 	- [ ] Fill squares with corresponding image from spritesheet
 
 - [ ] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
-	- [ ] Create buttons
+	- [x] Create buttons
 	- [ ] Add functionality to buttons
 
 - [ ] Label holes and balls
