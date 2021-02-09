@@ -52,6 +52,16 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameLogic\Board.cs" />
+    <Compile Include="GameLogic\Models\BoardObject.cs" />
+    <Compile Include="GameLogic\Models\BoardObjectTypes.cs" />
+    <Compile Include="GameLogic\Models\DirectionResponse.cs" />
+    <Compile Include="GameLogic\Models\Directions.cs" />
+    <Compile Include="GameLogic\Models\Hole.cs" />
+    <Compile Include="GameLogic\Models\Marble.cs" />
+    <Compile Include="GameLogic\Models\Position.cs" />
+    <Compile Include="GameLogic\Models\Solution.cs" />
+    <Compile Include="GameLogic\Models\WallPosition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
