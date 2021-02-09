@@ -31,6 +31,7 @@ namespace csci321_assignment02
         {
             this.gameBox = new System.Windows.Forms.GroupBox();
             this.controlBox = new System.Windows.Forms.GroupBox();
+            this.initButton = new System.Windows.Forms.Button();
             this.rightButton = new System.Windows.Forms.Button();
             this.leftButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
@@ -51,6 +52,7 @@ namespace csci321_assignment02
             // 
             // controlBox
             // 
+            this.controlBox.Controls.Add(this.initButton);
             this.controlBox.Controls.Add(this.rightButton);
             this.controlBox.Controls.Add(this.leftButton);
             this.controlBox.Controls.Add(this.downButton);
@@ -63,6 +65,18 @@ namespace csci321_assignment02
             this.controlBox.TabIndex = 1;
             this.controlBox.TabStop = false;
             this.controlBox.Text = "Controls";
+            // 
+            // initButton
+            // 
+            this.initButton.Font = new System.Drawing.Font("Liberation Mono", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.initButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.initButton.Location = new System.Drawing.Point(6, 367);
+            this.initButton.Name = "initButton";
+            this.initButton.Size = new System.Drawing.Size(228, 47);
+            this.initButton.TabIndex = 4;
+            this.initButton.Text = "Start Game";
+            this.initButton.UseVisualStyleBackColor = true;
+            this.initButton.Click += new System.EventHandler(this.initButton_Click);
             // 
             // rightButton
             // 
@@ -136,6 +150,7 @@ namespace csci321_assignment02
         private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.Button leftButton;
         private System.Windows.Forms.Button rightButton;
+        private System.Windows.Forms.Button initButton;
     }
 }
 

@@ -37,5 +37,19 @@ namespace csci321_assignment02
             Console.WriteLine("RIGHT clicked");
         }
 
+        private void initButton_Click(object sender, EventArgs e)
+        {
+            string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
+            string[] lines = System.IO.File.ReadAllLines(path);
+            
+            // Counts of components
+            string[] counts = lines[0].Split(' ');
+            int size = Convert.ToInt32(counts[0]);
+            int balls, holes = Convert.ToInt32(counts[1]);
+            int walls = Convert.ToInt32(counts[2]);
+
+            // Draw gameboard
+
+        }
     }
 }
