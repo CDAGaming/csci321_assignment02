@@ -3,9 +3,9 @@
 
 [ Requirements ]
 
-- [ ] Add data and image resources in debug folder
-	- [ ] puzzle.txt (data about how the game board should load on startup)
-	- [ ] puzzle.jpg (image spritesheet; contains all possible state each grid on the game board can be in)
+- [x] Add data and image resources in debug folder
+	- [x] puzzle.txt (data about how the game board should load on startup)
+	- [x] puzzle.jpg (image spritesheet; contains all possible state each grid on the game board can be in)
 
 - [ ] Create initial game board with data specified on data resource file
 	- [ ] Create 2D array of squares
