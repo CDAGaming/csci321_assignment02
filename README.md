@@ -8,7 +8,7 @@
 	- [x] puzzle.jpg (image spritesheet; contains all possible state each grid on the game board can be in)
 
 - [ ] Create initial game board with data specified on data resource file
-	- [ ] Create 2D array of squares
+	- [x] Create 2D array of squares
 	- [ ] Fill squares with corresponding image from spritesheet
 
 - [ ] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
