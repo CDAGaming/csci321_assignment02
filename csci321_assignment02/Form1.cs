@@ -15,7 +15,7 @@ namespace csci321_assignment02
     public partial class App : Form
     {
         Board board;
-        Bitmap[,] imageData;
+        Bitmap[,] imageData, boardRenderData;
 
         public App()
         {
@@ -92,16 +92,139 @@ namespace csci321_assignment02
 
         public void UpdateImageData()
         {
+            boardRenderData = new Bitmap[board.Size, board.Size];
             if (imageData != null)
             {
                 // TODO: Assign images to form based on the layout of puzzle.txt (board.Holes, board.Walls, and board.Marbles will help here)
                 for (int row = 0; row < board.Size; row++)
                     for (int column = 0; column < board.Size; column++)
                     {
-                        Marble possibleMarble = board.Marbles.Where(m => m.Position.Row == row && m.Position.Column == column).First();
-                        Hole possibleHole = board.Holes.Where(h => (h.Position.Row == row && h.Position.Column == column)).First();
-                        WallPosition possibleWall_FirstSide = board.Walls.Where(w => (w.FirstSide.Row == row && w.FirstSide.Column == column)).First();
-                        WallPosition possibleWall_SecondSide = board.Walls.Where(w => (w.SecondSide.Row == row && w.SecondSide.Column == column)).First();
+                        Marble possibleMarble = board.Marbles.Where(m => m.Position.Row == row && m.Position.Column == column).FirstOrDefault();
+                        Hole possibleHole = board.Holes.Where(h => (h.Position.Row == row && h.Position.Column == column)).FirstOrDefault();
+
+                        WallPosition possibleWall = board.Walls.Where(w => (w.FirstSide.Row == row && w.FirstSide.Column == column) || (w.SecondSide.Row == row && w.SecondSide.Column == column)).FirstOrDefault();
+
+                        Console.WriteLine("Position: " + row + ", " + column);
+                        Console.WriteLine("Marble: " + (possibleMarble == null ? "N/A" : possibleMarble.Number.ToString()));
+                        Console.WriteLine("Hole: " + (possibleHole == null ? "N/A" : possibleHole.Number.ToString()));
+                        Console.WriteLine("Wall: " + (possibleWall == null ? "N/A" : ("[" + possibleWall.FirstSide.Row + ", " + possibleWall.FirstSide.Column + " :: " + possibleWall.SecondSide.Row + ", " + possibleWall.SecondSide.Column + "]")));
+
+                        if (possibleHole == null && possibleMarble == null && possibleWall == null)
+                        {
+                            // OuterWall and WhiteSpace Rendering
+                            if (row == 0)
+                            {
+                                // Top Row Data
+                                if (column == 0)
+                                {
+                                    // Left Top
+                                    boardRenderData[row, column] = imageData[0, 5];
+                                } else if (column == board.Size - 1)
+                                {
+                                    // Right Top
+                                    boardRenderData[row, column] = imageData[1, 1];
+                                } else
+                                {
+                                    // Top Walls
+                                    boardRenderData[row, column] = imageData[0, 3];
+                                }
+                            } else if (row == board.Size - 1)
+                            {
+                                // Bottom Row Data
+                                if (column == 0)
+                                {
+                                    // Left Bottom
+                                    boardRenderData[row, column] = imageData[1, 0];
+                                }
+                                else if (column == board.Size - 1)
+                                {
+                                    // Right Bottom
+                                    boardRenderData[row, column] = imageData[1, 1];
+                                } else
+                                {
+                                    // Bottom Walls
+                                    boardRenderData[row, column] = imageData[0, 4];
+                                }
+                            }
+                            else if (column == 0)
+                            {
+                                // Left Side Data
+                                if (row == 0)
+                                {
+                                    // TODO
+                                }
+                                else if (row == board.Size - 1)
+                                {
+                                    // TODO
+                                } else
+                                {
+                                    // TODO
+                                }
+                            }
+                            else if (column == board.Size - 1)
+                            {
+                                // Right Side Data
+                                if (row == 0)
+                                {
+                                    // TODO
+                                }
+                                else if (row == board.Size - 1)
+                                {
+                                    // TODO
+                                } else
+                                {
+                                    // TODO
+                                }
+                            } else
+                            {
+                                // All other Empty space
+                                boardRenderData[row, column] = imageData[0, 0];
+                            }
+                        } else if (possibleWall == null)
+                        {
+                            if (possibleMarble != null)
+                            {
+                                boardRenderData[row, column] = imageData[4, 4];
+                            } else if (possibleHole != null)
+                            {
+                                boardRenderData[row, column] = imageData[2, 2];
+                            }
+                        } else
+                        {
+                            // Marble with West Wall
+                            if (possibleWall.GetRenderSide() == Sides.West)
+                            {
+                                if (possibleMarble != null)
+                                {
+                                    boardRenderData[row, column] = imageData[5, 4];
+                                } else if (possibleHole != null)
+                                {
+                                    boardRenderData[row, column] = imageData[3, 2];
+                                }
+                            } else if (possibleWall.GetRenderSide() == Sides.East)
+                            {
+                                // TODO
+                            } else if (possibleWall.GetRenderSide() == Sides.North)
+                            {
+                                // TODO
+                            } else if (possibleWall.GetRenderSide() == Sides.South)
+                            {
+                                // TODO
+                            } else
+                            {
+                                // If the Side is Unknown, we'll check if we're at edge of bounds for wall generation
+                                if (possibleMarble != null)
+                                {
+                                    // TODO
+                                } else if (possibleHole != null)
+                                {
+                                    // TODO
+                                } else
+                                {
+                                    Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
+                                }
+                            }
+                        }
                     }
             } else
             {

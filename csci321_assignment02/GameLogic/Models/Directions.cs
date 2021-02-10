@@ -5,6 +5,7 @@
         West = 1,
         East = 2,
         North = 3,
-        South = 4
+        South = 4,
+        Unknown = -1
     }
 }
