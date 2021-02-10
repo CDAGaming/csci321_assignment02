@@ -21,6 +21,7 @@ namespace csci321_assignment02
         public App()
         {
             InitializeComponent();
+            // TODO: Relocate this call when selecting a custom image/puzzle is setup
             SetupData();
         }
 
@@ -30,7 +31,18 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                board.LiftBoard(Sides.North, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.North, string.Empty);
+                UpdateImageData();
+
+                if (solveState.Success)
+                {
+                    // TODO: Win Event
+                }
+                else
+                {
+                    // TODO: Check for wrong Holes, or other conditions
+                    // Board#FellInAnotherHole should be used here
+                }
             }
         }
 
@@ -40,7 +52,18 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                board.LiftBoard(Sides.South, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.South, string.Empty);
+                UpdateImageData();
+
+                if (solveState.Success)
+                {
+                    // TODO: Win Event
+                }
+                else
+                {
+                    // TODO: Check for wrong Holes, or other conditions
+                    // Board#FellInAnotherHole should be used here
+                }
             }
         }
 
@@ -50,7 +73,18 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                board.LiftBoard(Sides.West, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.West, string.Empty);
+                UpdateImageData();
+
+                if (solveState.Success)
+                {
+                    // TODO: Win Event
+                }
+                else
+                {
+                    // TODO: Check for wrong Holes, or other conditions
+                    // Board#FellInAnotherHole should be used here
+                }
             }
         }
 
@@ -60,7 +94,17 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                board.LiftBoard(Sides.East, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.East, string.Empty);
+                UpdateImageData();
+
+                if (solveState.Success)
+                {
+                    // TODO: Win Event
+                } else
+                {
+                    // TODO: Check for wrong Holes, or other conditions
+                    // Board#FellInAnotherHole should be used here
+                }
             }
         }
 
@@ -97,7 +141,7 @@ namespace csci321_assignment02
             boardRenderData = new Bitmap[board.Size, board.Size];
             if (imageData != null)
             {
-                // TODO: Assign images to form based on the layout of puzzle.txt (board.Holes, board.Walls, and board.Marbles will help here)
+                // Assign images to form based on the layout of puzzle.txt
                 for (int row = 0; row < board.Size; row++)
                     for (int column = 0; column < board.Size; column++)
                     {
@@ -151,32 +195,12 @@ namespace csci321_assignment02
                             else if (column == 0)
                             {
                                 // Left Side Data
-                                if (row == 0)
-                                {
-                                    // TODO
-                                }
-                                else if (row == board.Size - 1)
-                                {
-                                    // TODO
-                                } else
-                                {
-                                    // TODO
-                                }
+                                boardRenderData[row, column] = imageData[0, 1];
                             }
                             else if (column == board.Size - 1)
                             {
                                 // Right Side Data
-                                if (row == 0)
-                                {
-                                    // TODO
-                                }
-                                else if (row == board.Size - 1)
-                                {
-                                    // TODO
-                                } else
-                                {
-                                    // TODO
-                                }
+                                boardRenderData[row, column] = imageData[0, 2];
                             } else
                             {
                                 // All other Empty space
@@ -239,12 +263,12 @@ namespace csci321_assignment02
                             } else
                             {
                                 // If the Side is Unknown, we'll check if we're at edge of bounds for wall generation
-                                if (possibleMarble != null && possibleMarble.GetBorderSide(board.Size) != BorderSides.Unknown)
+                                if (possibleMarble != null && possibleMarble.GetBorderSide(board.Size - 1) != BorderSides.Unknown)
                                 {
-                                    // TODO
-                                } else if (possibleHole != null && possibleHole.GetBorderSide(board.Size) != BorderSides.Unknown)
+                                    // TODO: 7 Conditionals for each possible border side
+                                } else if (possibleHole != null && possibleHole.GetBorderSide(board.Size - 1) != BorderSides.Unknown)
                                 {
-                                    // TODO
+                                    // TODO: 7 conditionals for each possible border side
                                 } else
                                 {
                                     Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
