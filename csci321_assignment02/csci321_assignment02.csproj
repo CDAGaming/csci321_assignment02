@@ -62,6 +62,9 @@
     <Compile Include="GameLogic\Models\Position.cs" />
     <Compile Include="GameLogic\Models\Solution.cs" />
     <Compile Include="GameLogic\Models\WallPosition.cs" />
+    <Compile Include="GridBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

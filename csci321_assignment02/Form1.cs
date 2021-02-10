@@ -86,10 +86,26 @@ namespace csci321_assignment02
 
             this.board = board;
             Console.WriteLine("Puzzle Data Read success, continuing to read Image Data...");
-            this.imageData = ReadImageData("puzzle.png", 7);
-            if (this.imageData != null)
+            imageData = ReadImageData("puzzle.jpg", 7);
+            UpdateImageData();
+        }
+
+        public void UpdateImageData()
+        {
+            if (imageData != null)
             {
                 // TODO: Assign images to form based on the layout of puzzle.txt (board.Holes, board.Walls, and board.Marbles will help here)
+                for (int row = 0; row < board.Size; row++)
+                    for (int column = 0; column < board.Size; column++)
+                    {
+                        Marble possibleMarble = board.Marbles.Where(m => m.Position.Row == row && m.Position.Column == column).First();
+                        Hole possibleHole = board.Holes.Where(h => (h.Position.Row == row && h.Position.Column == column)).First();
+                        WallPosition possibleWall_FirstSide = board.Walls.Where(w => (w.FirstSide.Row == row && w.FirstSide.Column == column)).First();
+                        WallPosition possibleWall_SecondSide = board.Walls.Where(w => (w.SecondSide.Row == row && w.SecondSide.Column == column)).First();
+                    }
+            } else
+            {
+                Console.WriteLine("Error: Image data is null");
             }
         }
 
