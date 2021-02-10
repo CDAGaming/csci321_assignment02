@@ -15,10 +15,12 @@ namespace csci321_assignment02
     public partial class App : Form
     {
         Board board;
+        Bitmap[,] imageData;
 
         public App()
         {
             InitializeComponent();
+            SetupData();
         }
 
         private void upButton_Click(object sender, EventArgs e)
@@ -81,6 +83,32 @@ namespace csci321_assignment02
                 Console.WriteLine("Retrieving wall positions");
                 board.InitializeBoardObjects("puzzle.txt", "file");
             }
+
+            this.board = board;
+            Console.WriteLine("Puzzle Data Read success, continuing to read Image Data...");
+            this.imageData = ReadImageData("puzzle.png", 7);
+            if (this.imageData != null)
+            {
+                // TODO: Assign images to form based on the layout of puzzle.txt (board.Holes, board.Walls, and board.Marbles will help here)
+            }
+        }
+
+        public Bitmap[,] ReadImageData(string name, int factor)
+        {
+            Bitmap[,] parsedData = new Bitmap[factor, factor];
+            Image img = Image.FromFile(name);
+            int widthFactored = (int)((double)img.Width / factor + 0.5);
+            int heightFactored = (int)((double)img.Height / factor + 0.5);
+            for (int i = 0; i < factor; i++)
+                for (int j = 0; j < factor; j++)
+                {
+                    parsedData[i, j] = new Bitmap(widthFactored, heightFactored);
+                    //Graphics g = Graphics.FromImage(parsedData[i, j]);
+                    //g.DrawImage(img, new Rectangle(0, 0, widthFactored, heightFactored), new Rectangle(j * widthFactored, i * heightFactored, widthFactored, heightFactored), GraphicsUnit.Pixel);
+                    //g.Dispose();
+                }
+
+            return parsedData;
         }
 
         public void ConsoleTest()
