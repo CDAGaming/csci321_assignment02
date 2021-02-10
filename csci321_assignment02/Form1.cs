@@ -16,6 +16,7 @@ namespace csci321_assignment02
     {
         Board board;
         Bitmap[,] imageData, boardRenderData;
+        GridBox[,] GameBoard;
 
         public App()
         {
@@ -85,6 +86,7 @@ namespace csci321_assignment02
             }
 
             this.board = board;
+            GameBoard = new GridBox[this.board.Size, this.board.Size];
             Console.WriteLine("Puzzle Data Read success, continuing to read Image Data...");
             imageData = ReadImageData("puzzle.jpg", 7);
             UpdateImageData();
@@ -191,32 +193,56 @@ namespace csci321_assignment02
                             }
                         } else
                         {
-                            // Marble with West Wall
                             if (possibleWall.GetRenderSide() == Sides.West)
                             {
+                                // West Wall
                                 if (possibleMarble != null)
                                 {
-                                    boardRenderData[row, column] = imageData[5, 4];
+                                    boardRenderData[row, column] = imageData[4, 5];
                                 } else if (possibleHole != null)
                                 {
-                                    boardRenderData[row, column] = imageData[3, 2];
+                                    boardRenderData[row, column] = imageData[2, 3];
                                 }
                             } else if (possibleWall.GetRenderSide() == Sides.East)
                             {
-                                // TODO
+                                // East Wall
+                                if (possibleMarble != null)
+                                {
+                                    boardRenderData[row, column] = imageData[4, 6];
+                                }
+                                else if (possibleHole != null)
+                                {
+                                    boardRenderData[row, column] = imageData[2, 4];
+                                }
                             } else if (possibleWall.GetRenderSide() == Sides.North)
                             {
-                                // TODO
+                                // North Wall
+                                if (possibleMarble != null)
+                                {
+                                    boardRenderData[row, column] = imageData[5, 0];
+                                }
+                                else if (possibleHole != null)
+                                {
+                                    boardRenderData[row, column] = imageData[2, 5];
+                                }
                             } else if (possibleWall.GetRenderSide() == Sides.South)
                             {
-                                // TODO
+                                // South Wall
+                                if (possibleMarble != null)
+                                {
+                                    boardRenderData[row, column] = imageData[5, 1];
+                                }
+                                else if (possibleHole != null)
+                                {
+                                    boardRenderData[row, column] = imageData[2, 6];
+                                }
                             } else
                             {
                                 // If the Side is Unknown, we'll check if we're at edge of bounds for wall generation
-                                if (possibleMarble != null)
+                                if (possibleMarble != null && possibleMarble.GetBorderSide(board.Size) != BorderSides.Unknown)
                                 {
                                     // TODO
-                                } else if (possibleHole != null)
+                                } else if (possibleHole != null && possibleHole.GetBorderSide(board.Size) != BorderSides.Unknown)
                                 {
                                     // TODO
                                 } else
@@ -242,9 +268,6 @@ namespace csci321_assignment02
                 for (int j = 0; j < factor; j++)
                 {
                     parsedData[i, j] = new Bitmap(widthFactored, heightFactored);
-                    //Graphics g = Graphics.FromImage(parsedData[i, j]);
-                    //g.DrawImage(img, new Rectangle(0, 0, widthFactored, heightFactored), new Rectangle(j * widthFactored, i * heightFactored, widthFactored, heightFactored), GraphicsUnit.Pixel);
-                    //g.Dispose();
                 }
 
             return parsedData;
