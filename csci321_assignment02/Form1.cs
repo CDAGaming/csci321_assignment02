@@ -31,7 +31,8 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.North, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.South, string.Empty);
+                board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
@@ -52,7 +53,8 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.South, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.North, string.Empty);
+                board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
@@ -73,7 +75,8 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.West, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.East, string.Empty);
+                board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
@@ -94,7 +97,8 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.East, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.West, string.Empty);
+                board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
@@ -226,6 +230,9 @@ namespace csci321_assignment02
                                 } else if (possibleHole != null)
                                 {
                                     boardRenderData[row, column] = imageData[2, 3];
+                                } else
+                                {
+                                    boardRenderData[row, column] = imageData[0, 1];
                                 }
                             } else if (possibleWall.GetRenderSide() == Sides.East)
                             {
@@ -237,6 +244,9 @@ namespace csci321_assignment02
                                 else if (possibleHole != null)
                                 {
                                     boardRenderData[row, column] = imageData[2, 4];
+                                } else
+                                {
+                                    boardRenderData[row, column] = imageData[0, 2];
                                 }
                             } else if (possibleWall.GetRenderSide() == Sides.North)
                             {
@@ -248,6 +258,9 @@ namespace csci321_assignment02
                                 else if (possibleHole != null)
                                 {
                                     boardRenderData[row, column] = imageData[2, 5];
+                                } else
+                                {
+                                    boardRenderData[row, column] = imageData[0, 3];
                                 }
                             } else if (possibleWall.GetRenderSide() == Sides.South)
                             {
@@ -259,26 +272,72 @@ namespace csci321_assignment02
                                 else if (possibleHole != null)
                                 {
                                     boardRenderData[row, column] = imageData[2, 6];
+                                } else
+                                {
+                                    boardRenderData[row, column] = imageData[0, 4];
                                 }
                             } else
                             {
-                                // If the Side is Unknown, we'll check if we're at edge of bounds for wall generation
-                                if (possibleMarble != null && possibleMarble.GetBorderSide(board.Size - 1) != BorderSides.Unknown)
-                                {
-                                    // TODO: 7 Conditionals for each possible border side
-                                } else if (possibleHole != null && possibleHole.GetBorderSide(board.Size - 1) != BorderSides.Unknown)
-                                {
-                                    // TODO: 7 conditionals for each possible border side
-                                } else
-                                {
-                                    Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
-                                }
+                                Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
                             }
                         }
                     }
             } else
             {
                 Console.WriteLine("Error: Image data is null");
+            }
+            DrawGrid();
+        }
+
+        private void DrawGrid()
+        {
+            // Draw gameboard (2D array of GridBox)
+            gameBox.Controls.Clear();
+
+            int gridHeight = 50;
+            int gridWidth = 50;
+            for (int row = 0; row < board.Size; row++)
+            {
+                for (int column = 0; column < board.Size; column++)
+                {
+                    GameBoard[row, column] = new GridBox();
+                    GameBoard[row, column].Row = row;
+                    GameBoard[row, column].Col = column;
+                    GameBoard[row, column].Location = new Point(gridHeight * column + 50, gridWidth * row + 100);
+                    GameBoard[row, column].Name = "grid" + row.ToString() + "_" + column.ToString();
+                    GameBoard[row, column].Image = boardRenderData[row, column];
+                    GameBoard[row, column].BackColor = Color.Green;
+                    GameBoard[row, column].Size = new Size(gridHeight, gridWidth);
+                    GameBoard[row, column].Paint += new PaintEventHandler(GridBox_Paint);
+                    gameBox.Controls.Add(GameBoard[row, column]);
+                }
+            }
+        }
+
+        // Writes row and col number for each grid
+        private void GridBox_Paint(object sender, PaintEventArgs e)
+        {
+            GridBox tmp = sender as GridBox;
+            Marble possibleMarble = board.Marbles.Where(m => m.Position.Row == tmp.Row && m.Position.Column == tmp.Col).FirstOrDefault();
+            Hole possibleHole = board.Holes.Where(h => (h.Position.Row == tmp.Row && h.Position.Column == tmp.Col)).FirstOrDefault();
+            string txt = null;
+            if (possibleHole != null)
+            {
+                txt = possibleHole.Number.ToString();
+            } else if (possibleMarble != null)
+            {
+                txt = possibleMarble.Number.ToString();
+            }
+
+            using (Font myFont = new Font("Arial", 10))
+            {
+                if (txt != null)
+                {
+                    StringFormat drawFormat = new StringFormat();
+                    drawFormat.Alignment = StringAlignment.Center;
+                    drawFormat.LineAlignment = StringAlignment.Center;
+                    e.Graphics.DrawString(txt, myFont, Brushes.Black, tmp.Width / 2, tmp.Height / 2, drawFormat);
+                }
             }
         }
 
