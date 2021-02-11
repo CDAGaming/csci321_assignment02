@@ -19,9 +19,12 @@ namespace csci321_assignment02
 
         // Variables
         Image img = Image.FromFile("puzzle.jpg");
+        int resWidth = 360;
+        int resHeight = 360;
         int emptyXY = 1;
         int holeXY = 3;
         int ballXY = 5;
+        int size;
         private GridBox[,] GameBoard;
 
         private void upButton_Click(object sender, EventArgs e)
@@ -48,19 +51,19 @@ namespace csci321_assignment02
         {
             Button current = sender as Button;
             current.Enabled = false;
-            //string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
-            string[] lines = System.IO.File.ReadAllLines("puzzleswirl.txt");
+            string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
+            string[] lines = System.IO.File.ReadAllLines(path);
 
             // Counts of components
             string[] counts = lines[0].Split(' ');
-            int size = Convert.ToInt32(counts[0]);
+            size = Convert.ToInt32(counts[0]);
             int balls = Convert.ToInt32(counts[1]);
             int holes = Convert.ToInt32(counts[1]);
             int walls = Convert.ToInt32(counts[2]);
 
             // Create gameboard (2D array of GridBox)
-            int gridHeight = 50;
-            int gridWidth = 50;
+            int gridHeight = resHeight / size;
+            int gridWidth = resHeight / size;
             GameBoard = new GridBox[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -75,10 +78,10 @@ namespace csci321_assignment02
                     GameBoard[i, j].RightWall = 0;
                     GameBoard[i, j].TopWall = 0;
                     GameBoard[i, j].BottomWall = 0;
-                    GameBoard[i, j].Location = new System.Drawing.Point(gridHeight * j + 50, gridWidth * i + 100);
+                    GameBoard[i, j].Location = new System.Drawing.Point(gridWidth * j + 20, gridHeight * i + 20);
                     GameBoard[i, j].Name = "grid" + i.ToString() + j.ToString();
                     GameBoard[i, j].BackColor = System.Drawing.Color.Black;
-                    GameBoard[i, j].Size = new System.Drawing.Size(gridHeight, gridWidth);
+                    GameBoard[i, j].Size = new System.Drawing.Size(gridWidth, gridHeight);
                     GameBoard[i, j].SizeMode = PictureBoxSizeMode.Normal;
                     gameBox.Controls.Add(GameBoard[i, j]);
                 }
@@ -151,11 +154,11 @@ namespace csci321_assignment02
                 {
                     GridBox box = GameBoard[i, j];
 
-                    box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawBorder);
+                    //box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawBorder);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawWalls);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_WriteNum);
-                    int pw = img.Width / 7;
-                    int ph = img.Height / 7;
+                    int pw = (img.Width / 7);
+                    int ph = (img.Height / 7);
 
                     Bitmap bm = new Bitmap(box.Width, box.Height);
                     Rectangle r = new Rectangle(0, 0, box.Width, box.Height);
@@ -196,7 +199,7 @@ namespace csci321_assignment02
 
             if (curr.LeftWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(Color.Black, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, bottomLeft);
@@ -205,7 +208,7 @@ namespace csci321_assignment02
 
             if (curr.RightWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(Color.Black, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topRight, bottomRight);
@@ -214,7 +217,7 @@ namespace csci321_assignment02
 
             if (curr.TopWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(Color.Black, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, topRight);
@@ -223,7 +226,7 @@ namespace csci321_assignment02
 
             if (curr.BottomWall == 1) 
             {
-                Pen pen = new Pen(Color.Black, 5);
+                Pen pen = new Pen(Color.Black, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
@@ -238,13 +241,16 @@ namespace csci321_assignment02
             string ballNum = curr.BallNum.ToString();
 
             StringFormat drawFormat = new StringFormat();
+            drawFormat.LineAlignment = StringAlignment.Center;
             drawFormat.Alignment = StringAlignment.Center;
+            Rectangle r = new Rectangle(0, 0, curr.Width, curr.Height);
+            Brush brushYellow = new SolidBrush(Color.Yellow);
 
             if (curr.HoleNum > 0)
             {
                 using (Font myFont = new Font("Arial", 10))
                 {
-                    e.Graphics.DrawString(holeNum, myFont, Brushes.Yellow, new Point(25, 15), drawFormat);
+                    e.Graphics.DrawString(holeNum, myFont, brushYellow, r, drawFormat);
                 }
             }
 
@@ -252,17 +258,8 @@ namespace csci321_assignment02
             {
                 using (Font myFont = new Font("Arial", 10))
                 {
-                    e.Graphics.DrawString(ballNum, myFont, Brushes.Yellow, new Point(25, 15), drawFormat);
+                    e.Graphics.DrawString(ballNum, myFont, brushYellow, r, drawFormat);
                 }
-            }
-        }
-
-        public void GridBox_DrawBorder(object sender, PaintEventArgs e)
-        {
-            Rectangle border = new Rectangle(0, 0, 50, 50);
-            using (Pen pen = new Pen(Color.White, 2))
-            {
-                e.Graphics.DrawRectangle(pen, border);
             }
         }
         
