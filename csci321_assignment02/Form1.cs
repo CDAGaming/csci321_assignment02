@@ -21,15 +21,48 @@ namespace csci321_assignment02
         Image img = Image.FromFile("puzzle.jpg");
         int resWidth = 360;
         int resHeight = 360;
-        int emptyXY = 1;
-        int holeXY = 3;
-        int ballXY = 5;
+        int emptyXY = 0;
+        int holeXY = 2;
+        int ballXY = 4;
         int size;
         private GridBox[,] GameBoard;
+        private GridBox[] Updates;
+
+        private void RenderBox(GridBox[] arr)
+        {
+
+        }
 
         private void upButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("UP clicked");
+            Updates = new GridBox[100];
+            int idx = 0;
+            for (int row = 1; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {
+                    GridBox box = GameBoard[row, col];
+                    if (box.HasBall())
+                    {
+                        Updates[idx++] = box;
+                        int currRow = row;
+                        Console.WriteLine(Updates);
+                        while (true)
+                        {
+                            if (!box.HasTopWall()) // no wall; move
+                            {
+
+                            }
+                            else // wall on top
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            // render
         }
 
         private void downButton_Click(object sender, EventArgs e)
@@ -63,7 +96,7 @@ namespace csci321_assignment02
 
             // Create gameboard (2D array of GridBox)
             int gridHeight = resHeight / size;
-            int gridWidth = resHeight / size;
+            int gridWidth = resWidth / size;
             GameBoard = new GridBox[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -78,6 +111,8 @@ namespace csci321_assignment02
                     GameBoard[i, j].RightWall = 0;
                     GameBoard[i, j].TopWall = 0;
                     GameBoard[i, j].BottomWall = 0;
+                    GameBoard[i, j].BallNum = 0;
+                    GameBoard[i, j].HoleNum = 0;
                     GameBoard[i, j].Location = new System.Drawing.Point(gridWidth * j + 20, gridHeight * i + 20);
                     GameBoard[i, j].Name = "grid" + i.ToString() + j.ToString();
                     GameBoard[i, j].BackColor = System.Drawing.Color.Black;
@@ -167,21 +202,21 @@ namespace csci321_assignment02
                     {
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * emptyXY, ph * emptyXY, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * 0, ph * 0, pw, ph, GraphicsUnit.Pixel);
                         }
                     }
                     else if (box.Item == 1)
                     {
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * ballXY, ph * ballXY, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * 2, ph * 2, pw, ph, GraphicsUnit.Pixel);
                         }
                     }
                     else if (box.Item == 2)
                     {
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * holeXY, ph * holeXY, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * 4, ph * 4, pw, ph, GraphicsUnit.Pixel);
                         }
                     }
                     box.Image = bm;

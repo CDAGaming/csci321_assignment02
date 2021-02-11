@@ -19,6 +19,36 @@ namespace csci321_assignment02
         private int topWall;
         private int bottomWall;
 
+        public bool HasBall()
+        {
+            return ballNum > 0;
+        }
+
+        public bool HasHole()
+        {
+            return holeNum > 0;
+        }
+
+        public bool HasLeftWall()
+        {
+            return leftWall == 1;
+        }
+
+        public bool HasRightWall()
+        {
+            return rightWall == 1;
+        }
+
+        public bool HasTopWall()
+        {
+            return topWall == 1;
+        }
+
+        public bool HasBottomWall()
+        {
+            return bottomWall == 1;
+        }
+
         public int Row
         {
             set
