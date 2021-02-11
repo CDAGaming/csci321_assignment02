@@ -78,9 +78,7 @@ namespace csci321_assignment02
 
         private void upButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("UP clicked");
             List<GridBox> Updates = new List<GridBox>();
-            int idx = 0;
             for (int row = 1; row < size; row++)
             {
                 for (int col = 0; col < size; col++)
@@ -88,31 +86,33 @@ namespace csci321_assignment02
                     GridBox box = GameBoard[row, col];
                     if (box.HasBall())
                     {
+                        Updates.Add(box);
                         int currRow = row;
+                        GridBox currBox;
                         while (true)
                         {
+                            currBox = GameBoard[currRow, col];
                             if (currRow == 0) // reached board edge
                             {
                                 break;
                             }
-                            if (!box.HasTopWall()) // no wall; move
+                            if (!currBox.HasTopWall()) // no wall; move
                             {
                                 GridBox nextBox = GameBoard[currRow - 1, col];
-                                Updates.Add(box);
                                 if (HasHoleNext(nextBox)) // hole next
                                 {
-                                    if (nextBox.HoleNum == box.BallNum) // correct hole
+                                    if (nextBox.HoleNum == currBox.BallNum) // correct hole
                                     {
-                                        box.Item = 0;
-                                        box.BallNum = 0;
+                                        currBox.Item = 0;
+                                        currBox.BallNum = 0;
                                         nextBox.Item = 0;
                                         nextBox.HoleNum = 0;
                                         Updates.Add(nextBox);
                                     }
                                     else // incorrect hole
                                     {
-                                        box.Item = -1;
-                                        box.BallNum = 0;
+                                        currBox.Item = -1;
+                                        currBox.BallNum = 0;
                                         nextBox.Item = -1;
                                         nextBox.HoleNum = 0;
                                         Updates.Add(nextBox);
@@ -120,12 +120,11 @@ namespace csci321_assignment02
                                 }
                                 else if (nextBox.Item == 0) // empty space
                                 {
-                                    GridBox tmpBox = GameBoard[currRow, col];
-                                    GridBox tmpBox2 = GameBoard[currRow - 1, col];
-                                    tmpBox2.Item = 1;
-                                    tmpBox2.BallNum = tmpBox.BallNum;
-                                    tmpBox.Item = 0;
-                                    tmpBox.BallNum = 0;
+                                    GridBox tmpBox = GameBoard[currRow - 1, col];
+                                    tmpBox.Item = 1;
+                                    tmpBox.BallNum = currBox.BallNum;
+                                    currBox.Item = 0;
+                                    currBox.BallNum = 0;
                                     currRow--;
                                 }
                                 else if (nextBox.Item == 1) // ball next
@@ -138,7 +137,7 @@ namespace csci321_assignment02
                                 break;
                             }
                         }
-                        Updates.Add(GameBoard[currRow, col]);
+                        Updates.Add(currBox);
                     }
                 }
             }
@@ -148,6 +147,7 @@ namespace csci321_assignment02
         private void downButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("DOWN clicked");
+            
         }
 
         private void leftButton_Click(object sender, EventArgs e)
