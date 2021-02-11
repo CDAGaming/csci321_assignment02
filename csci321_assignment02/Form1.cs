@@ -306,7 +306,8 @@ namespace csci321_assignment02
                     GameBoard[row, column].Location = new Point(gridHeight * column + 50, gridWidth * row + 100);
                     GameBoard[row, column].Name = "grid" + row.ToString() + "_" + column.ToString();
                     GameBoard[row, column].Image = boardRenderData[row, column];
-                    GameBoard[row, column].BackColor = Color.Green;
+                    GameBoard[row, column].SizeMode = PictureBoxSizeMode.StretchImage;
+                    //GameBoard[row, column].BackColor = Color.Green;
                     GameBoard[row, column].Size = new Size(gridHeight, gridWidth);
                     GameBoard[row, column].Paint += new PaintEventHandler(GridBox_Paint);
                     gameBox.Controls.Add(GameBoard[row, column]);
@@ -336,7 +337,7 @@ namespace csci321_assignment02
                     StringFormat drawFormat = new StringFormat();
                     drawFormat.Alignment = StringAlignment.Center;
                     drawFormat.LineAlignment = StringAlignment.Center;
-                    e.Graphics.DrawString(txt, myFont, Brushes.Black, tmp.Width / 2, tmp.Height / 2, drawFormat);
+                    e.Graphics.DrawString(txt, myFont, Brushes.White, tmp.Width / 2, tmp.Height / 2, drawFormat);
                 }
             }
         }
@@ -351,6 +352,9 @@ namespace csci321_assignment02
                 for (int j = 0; j < factor; j++)
                 {
                     parsedData[i, j] = new Bitmap(widthFactored, heightFactored);
+                    Graphics g = Graphics.FromImage(parsedData[i, j]);
+                    g.DrawImage(img, new Rectangle(0, 0, widthFactored, heightFactored), new Rectangle(j * widthFactored, i * heightFactored, widthFactored, heightFactored), GraphicsUnit.Pixel);
+                    g.Dispose();
                 }
 
             return parsedData;
