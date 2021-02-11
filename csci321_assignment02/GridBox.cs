@@ -13,7 +13,7 @@ namespace csci321_assignment02
         private int ballNum;
         private int holeNum;
         private int wallCount;
-        private int item;
+        private int item; // 0 = empty; 1 = ball; 2 = hole; -1 = error
         private int leftWall;
         private int rightWall;
         private int topWall;
@@ -21,12 +21,7 @@ namespace csci321_assignment02
 
         public bool HasBall()
         {
-            return ballNum > 0;
-        }
-
-        public bool HasHole()
-        {
-            return holeNum > 0;
+            return item == 1;
         }
 
         public bool HasLeftWall()
