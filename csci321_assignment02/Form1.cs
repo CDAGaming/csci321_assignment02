@@ -1,4 +1,4 @@
-﻿using MarbleGame;
+using MarbleGame;
 using MarbleGame.Models;
 using System;
 using System.Collections.Generic;
@@ -189,7 +189,7 @@ namespace csci321_assignment02
                                 else if (column == board.Size - 1)
                                 {
                                     // Right Bottom
-                                    boardRenderData[row, column] = imageData[1, 1];
+                                    boardRenderData[row, column] = imageData[1, 2];
                                 } else
                                 {
                                     // Bottom Walls
@@ -210,7 +210,7 @@ namespace csci321_assignment02
                                 // All other Empty space
                                 boardRenderData[row, column] = imageData[0, 0];
                             }
-                        } else if (possibleWall == null)
+                        } else if (possibleWall == null && (possibleMarble != null && possibleMarble.GetBorderSide(board.Size) == BorderSides.Unknown) || (possibleHole != null && possibleHole.GetBorderSide(board.Size) == BorderSides.Unknown))
                         {
                             if (possibleMarble != null)
                             {
@@ -221,7 +221,9 @@ namespace csci321_assignment02
                             }
                         } else
                         {
-                            if (possibleWall.GetRenderSide() == Sides.West)
+                            BorderSides border = possibleMarble != null ? possibleMarble.GetBorderSide(board.Size) : (possibleHole != null ? possibleHole.GetBorderSide(board.Size) : BorderSides.Unknown);
+                            Sides wallBorder = possibleWall != null ? possibleWall.GetRenderSide() : Sides.Unknown;
+                            if (wallBorder == Sides.West || border == BorderSides.Left)
                             {
                                 // West Wall
                                 if (possibleMarble != null)
@@ -234,7 +236,7 @@ namespace csci321_assignment02
                                 {
                                     boardRenderData[row, column] = imageData[0, 1];
                                 }
-                            } else if (possibleWall.GetRenderSide() == Sides.East)
+                            } else if (wallBorder == Sides.East || border == BorderSides.Right)
                             {
                                 // East Wall
                                 if (possibleMarble != null)
@@ -248,7 +250,7 @@ namespace csci321_assignment02
                                 {
                                     boardRenderData[row, column] = imageData[0, 2];
                                 }
-                            } else if (possibleWall.GetRenderSide() == Sides.North)
+                            } else if (wallBorder == Sides.North || border == BorderSides.Top)
                             {
                                 // North Wall
                                 if (possibleMarble != null)
@@ -262,7 +264,7 @@ namespace csci321_assignment02
                                 {
                                     boardRenderData[row, column] = imageData[0, 3];
                                 }
-                            } else if (possibleWall.GetRenderSide() == Sides.South)
+                            } else if (wallBorder == Sides.South || border == BorderSides.Bottom)
                             {
                                 // South Wall
                                 if (possibleMarble != null)
