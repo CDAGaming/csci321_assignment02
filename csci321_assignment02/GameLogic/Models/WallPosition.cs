@@ -1,24 +1,22 @@
-﻿namespace MarbleGame.Models
+﻿using System;
+
+namespace MarbleGame.Models
 {
     public class WallPosition
     {
         public Position FirstSide { get; set; }
         public Position SecondSide { get; set; }
 
-        public Sides GetRenderSide()
+        public Sides GetRenderSide(int row, int column)
         {
-            if (SecondSide.Column > FirstSide.Column)
+            if (FirstSide.Row == SecondSide.Row)
             {
-                return Sides.West;
-            } else if (SecondSide.Column < FirstSide.Column)
+                int colDistance = Math.Abs(FirstSide.Column - SecondSide.Column);
+                return (colDistance > 0 && column == FirstSide.Column) ? Sides.East : Sides.West;
+            } else if (FirstSide.Column == SecondSide.Column)
             {
-                return Sides.East;
-            } else if (SecondSide.Row > FirstSide.Row)
-            {
-                return Sides.North;
-            } else if (SecondSide.Row < FirstSide.Row)
-            {
-                return Sides.West;
+                int rowDistance = Math.Abs(FirstSide.Row - SecondSide.Row);
+                return (rowDistance > 0 && row == FirstSide.Row) ? Sides.North : Sides.South;
             } else
             {
                 return Sides.Unknown;
