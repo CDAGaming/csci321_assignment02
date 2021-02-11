@@ -24,6 +24,7 @@ namespace csci321_assignment02
         int emptyXY = 0;
         int holeXY = 2;
         int ballXY = 4;
+        int errXY = 6;
         int size;
         private GridBox[,] GameBoard;
 
@@ -59,6 +60,13 @@ namespace csci321_assignment02
                         g.DrawImage(img, r, pw * holeXY, ph * holeXY, pw, ph, GraphicsUnit.Pixel);
                     }
                 }
+                else if (box.Item == -1)
+                {
+                    using (Graphics g = Graphics.FromImage(bm))
+                    {
+                        g.DrawImage(img, r, pw * errXY, ph * errXY, pw, ph, GraphicsUnit.Pixel);
+                    }
+                }
                 box.Image = bm;
             }
         }
@@ -72,7 +80,6 @@ namespace csci321_assignment02
         {
             Console.WriteLine("UP clicked");
             List<GridBox> Updates = new List<GridBox>();
-            //Updates = new GridBox[100];
             int idx = 0;
             for (int row = 1; row < size; row++)
             {
@@ -135,7 +142,6 @@ namespace csci321_assignment02
                     }
                 }
             }
-            // render
             RenderBox(Updates);
         }
 
