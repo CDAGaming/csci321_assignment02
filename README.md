@@ -9,13 +9,15 @@
 
 - [ ] Create initial game board with data specified on data resource file
 	- [x] Create 2D array of squares
-	- [ ] Fill squares with corresponding image from spritesheet
+	- [x] Fill squares with corresponding image from spritesheet
+	- [x] Draw walls
+	- [ ] Account for scaling for spritesheets of varying dimensions
 
 - [ ] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
 	- [x] Create buttons
 	- [ ] Add functionality to buttons
 
-- [ ] Label holes and balls
+- [x] Label holes and balls
 
 - [ ] Validate move and check win
 	- [ ] Loss: a ball falls into the wrong hole
