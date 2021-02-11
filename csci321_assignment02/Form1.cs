@@ -280,7 +280,53 @@ namespace csci321_assignment02
                                 }
                             } else
                             {
-                                Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
+                                // This should only be reached for corner-marble wall cases
+                                if (border != BorderSides.Unknown)
+                                {
+                                    if (border == BorderSides.LeftTop)
+                                    {
+                                        if (possibleMarble != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[5, 2];
+                                        } else if (possibleHole != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[3, 0];
+                                        }
+                                    } else if (border == BorderSides.RightTop)
+                                    {
+                                        if (possibleMarble != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[5, 5];
+                                        }
+                                        else if (possibleHole != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[3, 3];
+                                        }
+                                    } else if (border == BorderSides.LeftBottom)
+                                    {
+                                        if (possibleMarble != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[5, 4];
+                                        }
+                                        else if (possibleHole != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[3, 2];
+                                        }
+                                    } else if (border == BorderSides.RightBottom)
+                                    {
+                                        if (possibleMarble != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[5, 6];
+                                        }
+                                        else if (possibleHole != null)
+                                        {
+                                            boardRenderData[row, column] = imageData[3, 4];
+                                        }
+                                    }
+                                } else
+                                {
+                                    Console.WriteLine("Unknown Circumstances for Generation, skipping [" + row + ", " + column + "]");
+                                }
                             }
                         }
                     }
@@ -342,6 +388,8 @@ namespace csci321_assignment02
                     e.Graphics.DrawString(txt, myFont, Brushes.White, tmp.Width / 2, tmp.Height / 2, drawFormat);
                 }
             }
+
+            ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Black, ButtonBorderStyle.Solid);
         }
 
         public Bitmap[,] ReadImageData(string name, int factor)
