@@ -26,17 +26,53 @@ namespace csci321_assignment02
         int ballXY = 4;
         int size;
         private GridBox[,] GameBoard;
-        private GridBox[] Updates;
 
-        private void RenderBox(GridBox[] arr)
+        private void RenderBox(List<GridBox> arr)
         {
+            for (int i = 0; i < arr.Count; i++)
+            {
+                GridBox box = arr[i];
+                int pw = (img.Width / 7);
+                int ph = (img.Height / 7);
 
+                Bitmap bm = new Bitmap(box.Width, box.Height);
+                Rectangle r = new Rectangle(0, 0, box.Width, box.Height);
+
+                if (box.Item == 0)
+                {
+                    using (Graphics g = Graphics.FromImage(bm))
+                    {
+                        g.DrawImage(img, r, pw * emptyXY, ph * emptyXY, pw, ph, GraphicsUnit.Pixel);
+                    }
+                }
+                else if (box.Item == 1)
+                {
+                    using (Graphics g = Graphics.FromImage(bm))
+                    {
+                        g.DrawImage(img, r, pw * ballXY, ph * ballXY, pw, ph, GraphicsUnit.Pixel);
+                    }
+                }
+                else if (box.Item == 2)
+                {
+                    using (Graphics g = Graphics.FromImage(bm))
+                    {
+                        g.DrawImage(img, r, pw * holeXY, ph * holeXY, pw, ph, GraphicsUnit.Pixel);
+                    }
+                }
+                box.Image = bm;
+            }
+        }
+
+        private bool HasHoleNext(GridBox box)
+        {
+            return box.HoleNum > 0;
         }
 
         private void upButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("UP clicked");
-            Updates = new GridBox[100];
+            List<GridBox> Updates = new List<GridBox>();
+            //Updates = new GridBox[100];
             int idx = 0;
             for (int row = 1; row < size; row++)
             {
@@ -45,24 +81,62 @@ namespace csci321_assignment02
                     GridBox box = GameBoard[row, col];
                     if (box.HasBall())
                     {
-                        Updates[idx++] = box;
                         int currRow = row;
-                        Console.WriteLine(Updates);
                         while (true)
                         {
+                            if (currRow == 0) // reached board edge
+                            {
+                                break;
+                            }
                             if (!box.HasTopWall()) // no wall; move
                             {
-
+                                GridBox nextBox = GameBoard[currRow - 1, col];
+                                Updates.Add(box);
+                                if (HasHoleNext(nextBox)) // hole next
+                                {
+                                    if (nextBox.HoleNum == box.BallNum) // correct hole
+                                    {
+                                        box.Item = 0;
+                                        box.BallNum = 0;
+                                        nextBox.Item = 0;
+                                        nextBox.HoleNum = 0;
+                                        Updates.Add(nextBox);
+                                    }
+                                    else // incorrect hole
+                                    {
+                                        box.Item = -1;
+                                        box.BallNum = 0;
+                                        nextBox.Item = -1;
+                                        nextBox.HoleNum = 0;
+                                        Updates.Add(nextBox);
+                                    }
+                                }
+                                else if (nextBox.Item == 0) // empty space
+                                {
+                                    GridBox tmpBox = GameBoard[currRow, col];
+                                    GridBox tmpBox2 = GameBoard[currRow - 1, col];
+                                    tmpBox2.Item = 1;
+                                    tmpBox2.BallNum = tmpBox.BallNum;
+                                    tmpBox.Item = 0;
+                                    tmpBox.BallNum = 0;
+                                    currRow--;
+                                }
+                                else if (nextBox.Item == 1) // ball next
+                                {
+                                    break;
+                                }
                             }
                             else // wall on top
                             {
                                 break;
                             }
                         }
+                        Updates.Add(GameBoard[currRow, col]);
                     }
                 }
             }
             // render
+            RenderBox(Updates);
         }
 
         private void downButton_Click(object sender, EventArgs e)
@@ -122,7 +196,7 @@ namespace csci321_assignment02
                 }
             }
 
-            // Assign balls
+            // Assign balls (Item = 1)
             for (int i = 1; i <= balls; i++)
             {
                 string[] coords = lines[i].Split(' ');
@@ -132,7 +206,7 @@ namespace csci321_assignment02
                 GameBoard[row, col].Item = 1;
             }
 
-            // Assign holes
+            // Assign holes (Item = 2)
             for (int i = balls + 1; i <= (balls * 2); i++)
             {
                 string[] coords = lines[i].Split(' ');
@@ -189,7 +263,6 @@ namespace csci321_assignment02
                 {
                     GridBox box = GameBoard[i, j];
 
-                    //box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawBorder);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawWalls);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_WriteNum);
                     int pw = (img.Width / 7);
@@ -202,21 +275,28 @@ namespace csci321_assignment02
                     {
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * 0, ph * 0, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * emptyXY, ph * emptyXY, pw, ph, GraphicsUnit.Pixel);
                         }
                     }
                     else if (box.Item == 1)
                     {
+                        Font f = new Font("Arial", 24.0f);
+                        Brush by = new SolidBrush(Color.Yellow);
+                        StringFormat sf = new StringFormat();
+                        sf.LineAlignment = StringAlignment.Center;
+                        sf.Alignment = StringAlignment.Center;
+                        string text = box.BallNum.ToString();
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * 2, ph * 2, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * ballXY, ph * ballXY, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawString(text, f, by, r, sf);
                         }
                     }
                     else if (box.Item == 2)
                     {
                         using (Graphics g = Graphics.FromImage(bm))
                         {
-                            g.DrawImage(img, r, pw * 4, ph * 4, pw, ph, GraphicsUnit.Pixel);
+                            g.DrawImage(img, r, pw * holeXY, ph * holeXY, pw, ph, GraphicsUnit.Pixel);
                         }
                     }
                     box.Image = bm;
@@ -234,7 +314,7 @@ namespace csci321_assignment02
 
             if (curr.LeftWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 10);
+                Pen pen = new Pen(Color.Red, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, bottomLeft);
@@ -243,7 +323,7 @@ namespace csci321_assignment02
 
             if (curr.RightWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 10);
+                Pen pen = new Pen(Color.Red, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topRight, bottomRight);
@@ -252,7 +332,7 @@ namespace csci321_assignment02
 
             if (curr.TopWall == 1)
             {
-                Pen pen = new Pen(Color.Black, 10);
+                Pen pen = new Pen(Color.Red, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, topRight);
@@ -261,7 +341,7 @@ namespace csci321_assignment02
 
             if (curr.BottomWall == 1) 
             {
-                Pen pen = new Pen(Color.Black, 10);
+                Pen pen = new Pen(Color.Red, 10);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
@@ -283,7 +363,7 @@ namespace csci321_assignment02
 
             if (curr.HoleNum > 0)
             {
-                using (Font myFont = new Font("Arial", 10))
+                using (Font myFont = new Font("Arial", 24.0f))
                 {
                     e.Graphics.DrawString(holeNum, myFont, brushYellow, r, drawFormat);
                 }
@@ -291,7 +371,7 @@ namespace csci321_assignment02
 
             if (curr.BallNum > 0)
             {
-                using (Font myFont = new Font("Arial", 10))
+                using (Font myFont = new Font("Arial", 24.0f))
                 {
                     e.Graphics.DrawString(ballNum, myFont, brushYellow, r, drawFormat);
                 }
