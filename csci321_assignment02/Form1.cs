@@ -31,18 +31,17 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.South, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.South, string.Empty, true);
                 board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
                 {
-                    // TODO: Win Event
+                    EndGameEvent("You won, please restart the game for a new game!");
                 }
                 else
                 {
-                    // TODO: Check for wrong Holes, or other conditions
-                    // Board#FellInAnotherHole should be used here
+                    UpdateImageForLoss();
                 }
             }
         }
@@ -53,18 +52,17 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.North, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.North, string.Empty, true);
                 board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
                 {
-                    // TODO: Win Event
+                    EndGameEvent("You won, please restart the game for a new game!");
                 }
                 else
                 {
-                    // TODO: Check for wrong Holes, or other conditions
-                    // Board#FellInAnotherHole should be used here
+                    UpdateImageForLoss();
                 }
             }
         }
@@ -75,18 +73,17 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.East, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.East, string.Empty, true);
                 board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
                 {
-                    // TODO: Win Event
+                    EndGameEvent("You won, please restart the game for a new game!");
                 }
                 else
                 {
-                    // TODO: Check for wrong Holes, or other conditions
-                    // Board#FellInAnotherHole should be used here
+                    UpdateImageForLoss();
                 }
             }
         }
@@ -97,17 +94,17 @@ namespace csci321_assignment02
             if (board != null)
             {
                 // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.West, string.Empty);
+                Solution solveState = board.LiftBoard(Sides.West, string.Empty, true);
                 board = solveState.BoardState;
                 UpdateImageData();
 
                 if (solveState.Success)
                 {
-                    // TODO: Win Event
-                } else
+                    EndGameEvent("You won, please restart the game for a new game!");
+                }
+                else
                 {
-                    // TODO: Check for wrong Holes, or other conditions
-                    // Board#FellInAnotherHole should be used here
+                    UpdateImageForLoss();
                 }
             }
         }
@@ -337,13 +334,36 @@ namespace csci321_assignment02
             DrawGrid();
         }
 
+        private void EndGameEvent(string message)
+        {
+            MessageBox.Show(message);
+            upButton.Enabled = false;
+            downButton.Enabled = false;
+            leftButton.Enabled = false;
+            rightButton.Enabled = false;
+        }
+
+        private void UpdateImageForLoss()
+        {
+            bool hasLosses = false;
+            foreach (var marble in board.Marbles.Where(m => m.IsInWrongHole))
+            {
+                boardRenderData[marble.Position.Row, marble.Position.Column] = imageData[6, 6];
+                hasLosses = true;
+            }
+            if (hasLosses)
+            {
+                EndGameEvent("You've landed your marble in a bad hole, you lose!");
+            }
+        }
+
         private void DrawGrid()
         {
             // Draw gameboard (2D array of GridBox)
             gameBox.Controls.Clear();
 
-            int gridHeight = 50;
-            int gridWidth = 50;
+            int gridHeight = 95;
+            int gridWidth = 95;
             for (int row = 0; row < board.Size; row++)
             {
                 for (int column = 0; column < board.Size; column++)
@@ -351,12 +371,11 @@ namespace csci321_assignment02
                     GameBoard[row, column] = new GridBox();
                     GameBoard[row, column].Row = row;
                     GameBoard[row, column].Col = column;
-                    GameBoard[row, column].Location = new Point(gridHeight * column + 50, gridWidth * row + 100);
+                    GameBoard[row, column].Location = new Point(10 + (gridWidth * column), 20 + (gridHeight * row));
                     GameBoard[row, column].Name = "grid" + row.ToString() + "_" + column.ToString();
                     GameBoard[row, column].Image = boardRenderData[row, column];
-                    GameBoard[row, column].SizeMode = PictureBoxSizeMode.StretchImage;
-                    //GameBoard[row, column].BackColor = Color.Green;
-                    GameBoard[row, column].Size = new Size(gridHeight, gridWidth);
+                    GameBoard[row, column].Size = new Size(100, 100);
+                    GameBoard[row, column].SizeMode = PictureBoxSizeMode.CenterImage;
                     GameBoard[row, column].Paint += new PaintEventHandler(GridBox_Paint);
                     gameBox.Controls.Add(GameBoard[row, column]);
                 }

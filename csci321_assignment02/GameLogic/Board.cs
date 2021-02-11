@@ -172,7 +172,7 @@ namespace MarbleGame
             return routes.Where(r => r.Success).OrderBy(r => r.Route.Length).FirstOrDefault() ?? new Solution();
         }
 
-        public Solution LiftBoard(Sides liftedSide, string moves, bool doContinue = false)
+        public Solution LiftBoard(Sides liftedSide, string moves, bool allowFailues = false, bool doContinue = false)
         {
             var newBoardState = new Board
             {
@@ -182,7 +182,7 @@ namespace MarbleGame
                 Walls = this.Walls
             };
 
-            DirectionResponse response = newBoardState.MoveMarbles(liftedSide);
+            DirectionResponse response = newBoardState.MoveMarbles(liftedSide, allowFailues);
             if (response.Success && !newBoardState.BoardStateDidNotChange(response.BoardState))
             {
                 moves += liftedSide.ToString()[0];
@@ -204,7 +204,7 @@ namespace MarbleGame
             return new Solution { Route = moves += '*', BoardState = newBoardState };
         }
 
-        private DirectionResponse MoveMarbles(Sides liftedSide)
+        private DirectionResponse MoveMarbles(Sides liftedSide, bool allowFails = false)
         {
             var newBoardState = new Board
             {
@@ -224,8 +224,17 @@ namespace MarbleGame
                     while (MarbleDidNotGetTheDestination(lineMarbles[j].Position, targetPosition, liftedSide) && !lineMarbles[j].IsInHole)  //move till it either doesn't reach the destination or fell in its hole
                     {
                         lineMarbles[j].Move(liftedSide);
-                        if (newBoardState.FellInAnotherHole(lineMarbles[j]))    //wrong route, break the move
-                            return new DirectionResponse();
+                        if (newBoardState.FellInAnotherHole(lineMarbles[j], allowFails))
+                        {
+                            //wrong route, break the move
+                            if (!allowFails)
+                            {
+                                return new DirectionResponse();
+                            }/* else
+                            {
+                                return new DirectionResponse { Success = true, Finished = false, BoardState = newBoardState };
+                            }*/
+                        }
                         newBoardState.FillTheHoleIfMarbleIsIn(lineMarbles[j]);
                         if (newBoardState.Marbles.All(m => m.IsInHole))         //solution found
                             return new DirectionResponse { Success = true, Finished = true, BoardState = newBoardState };
@@ -336,10 +345,19 @@ namespace MarbleGame
         }
 
         //marble moved to another hole
-        private bool FellInAnotherHole(Marble marble)
+        private bool FellInAnotherHole(Marble marble, bool allowFails = false)
         {
-            return Holes.Any(h => !h.IsFilled && h.Number != marble.Number
+            bool returnState = Holes.Any(h => !h.IsFilled && h.Number != marble.Number
                                 && h.Position.Row == marble.Position.Row && h.Position.Column == marble.Position.Column);
+            if (allowFails && returnState)
+            {
+                Hole marbleHole = Holes.First(h => !h.IsFilled && h.Number != marble.Number
+                                && h.Position.Row == marble.Position.Row && h.Position.Column == marble.Position.Column);
+                marbleHole.IsFilled = true;
+                marble.IsInHole = true;
+                marble.IsInWrongHole = true;
+            }
+            return returnState;
         }
 
         //Marble fell in its hole

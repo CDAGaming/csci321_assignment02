@@ -6,6 +6,8 @@ namespace MarbleGame.Models
     {
         public bool IsInHole { get; set; }
 
+        public bool IsInWrongHole { get; set; }
+
         public void Move(Sides liftedSide)
         {
             switch (liftedSide)
