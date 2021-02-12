@@ -25,120 +25,85 @@ namespace csci321_assignment02
             SetupData();
         }
 
-        private void upButton_Click(object sender, EventArgs e)
+        private void UpButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("UP clicked");
-            if (board != null)
-            {
-                // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.South, string.Empty, true);
-                board = solveState.BoardState;
-                UpdateImageData();
-
-                if (solveState.Success)
-                {
-                    EndGameEvent("You won, please restart the game for a new game!");
-                }
-                else
-                {
-                    UpdateImageForLoss();
-                }
-            }
+            UpdateBoard(Sides.South);
         }
 
-        private void downButton_Click(object sender, EventArgs e)
+        private void DownButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("DOWN clicked");
-            if (board != null)
-            {
-                // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.North, string.Empty, true);
-                board = solveState.BoardState;
-                UpdateImageData();
-
-                if (solveState.Success)
-                {
-                    EndGameEvent("You won, please restart the game for a new game!");
-                }
-                else
-                {
-                    UpdateImageForLoss();
-                }
-            }
+            UpdateBoard(Sides.North);
         }
 
-        private void leftButton_Click(object sender, EventArgs e)
+        private void LeftButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("LEFT clicked");
-            if (board != null)
-            {
-                // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.East, string.Empty, true);
-                board = solveState.BoardState;
-                UpdateImageData();
-
-                if (solveState.Success)
-                {
-                    EndGameEvent("You won, please restart the game for a new game!");
-                }
-                else
-                {
-                    UpdateImageForLoss();
-                }
-            }
+            UpdateBoard(Sides.East);
         }
 
-        private void rightButton_Click(object sender, EventArgs e)
+        private void RightButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("RIGHT clicked");
-            if (board != null)
-            {
-                // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
-                Solution solveState = board.LiftBoard(Sides.West, string.Empty, true);
-                board = solveState.BoardState;
-                UpdateImageData();
-
-                if (solveState.Success)
-                {
-                    EndGameEvent("You won, please restart the game for a new game!");
-                }
-                else
-                {
-                    UpdateImageForLoss();
-                }
-            }
+            UpdateBoard(Sides.West);
         }
 
-        public void SetupData()
+        public void SetupData(string puzzleDataLoc = "cache/puzzle.txt", string puzzleImageLoc = "cache/puzzle.jpg")
         {
             Console.WriteLine("Setting up board based on pre-supplied data");
             Board board = new Board();
-            board.InitializeBasicParams("puzzle.txt", "file");
+            board.InitializeBasicParams(puzzleDataLoc, "file");
 
             if (!(board.Size == 0 && board.MarblesCount == 0 && board.WallsCount == 0))
             {
                 //Initialize marbles
                 Console.WriteLine("Retrieving marble positions");
-                board.InitializeBoardObjects(BoardObjectTypes.Marble, "puzzle.txt", "file");
+                board.InitializeBoardObjects(BoardObjectTypes.Marble, puzzleDataLoc, "file");
 
                 //Initialize holes
                 Console.WriteLine("Retrieving hole positions");
-                board.InitializeBoardObjects(BoardObjectTypes.Hole, "puzzle.txt", "file");
+                board.InitializeBoardObjects(BoardObjectTypes.Hole, puzzleDataLoc, "file");
 
                 //Initialize walls
                 Console.WriteLine("Retrieving wall positions");
-                board.InitializeBoardObjects("puzzle.txt", "file");
+                board.InitializeBoardObjects(puzzleDataLoc, "file");
+            } else
+            {
+                Console.WriteLine("Error: Invalid Data, please try again...");
+                return;
             }
 
             this.board = board;
             GameBoard = new GridBox[this.board.Size, this.board.Size];
             Console.WriteLine("Puzzle Data Read success, continuing to read Image Data...");
-            imageData = ReadImageData("puzzle.jpg", 7);
+            imageData = ReadImageData(puzzleImageLoc, 7);
             UpdateImageData();
+        }
+
+        public void UpdateBoard(Sides side, bool allowFailures = true)
+        {
+            if (board != null)
+            {
+                // Solution#Routes also stores the move history, but we may need to replace string.history to store a localized copy
+                Solution solveState = board.LiftBoard(side, string.Empty, allowFailures);
+                board = solveState.BoardState;
+                UpdateImageData();
+
+                if (solveState.Success)
+                {
+                    EndGameEvent("You won, please restart the game for a new game!");
+                }
+                else
+                {
+                    UpdateImageForLoss();
+                }
+            }
         }
 
         public void UpdateImageData()
         {
+            // Clear the Current Board before supplying new data
             boardRenderData = new Bitmap[board.Size, board.Size];
             if (imageData != null)
             {
@@ -353,6 +318,7 @@ namespace csci321_assignment02
             }
             if (hasLosses)
             {
+                DrawGrid();
                 EndGameEvent("You've landed your marble in a bad hole, you lose!");
             }
         }
@@ -368,14 +334,16 @@ namespace csci321_assignment02
             {
                 for (int column = 0; column < board.Size; column++)
                 {
-                    GameBoard[row, column] = new GridBox();
-                    GameBoard[row, column].Row = row;
-                    GameBoard[row, column].Col = column;
-                    GameBoard[row, column].Location = new Point(10 + (gridWidth * column), 20 + (gridHeight * row));
-                    GameBoard[row, column].Name = "grid" + row.ToString() + "_" + column.ToString();
-                    GameBoard[row, column].Image = boardRenderData[row, column];
-                    GameBoard[row, column].Size = new Size(100, 100);
-                    GameBoard[row, column].SizeMode = PictureBoxSizeMode.CenterImage;
+                    GameBoard[row, column] = new GridBox
+                    {
+                        Row = row,
+                        Col = column,
+                        Location = new Point(10 + (gridWidth * column), 20 + (gridHeight * row)),
+                        Name = "grid" + row.ToString() + "_" + column.ToString(),
+                        Image = boardRenderData[row, column],
+                        Size = new Size(100, 100),
+                        SizeMode = PictureBoxSizeMode.CenterImage
+                    };
                     GameBoard[row, column].Paint += new PaintEventHandler(GridBox_Paint);
                     gameBox.Controls.Add(GameBoard[row, column]);
                 }
@@ -401,9 +369,11 @@ namespace csci321_assignment02
             {
                 if (txt != null)
                 {
-                    StringFormat drawFormat = new StringFormat();
-                    drawFormat.Alignment = StringAlignment.Center;
-                    drawFormat.LineAlignment = StringAlignment.Center;
+                    StringFormat drawFormat = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
                     e.Graphics.DrawString(txt, myFont, Brushes.White, tmp.Width / 2, tmp.Height / 2, drawFormat);
                 }
             }
