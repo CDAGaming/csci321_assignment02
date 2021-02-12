@@ -13,20 +13,20 @@
 	- [x] Draw walls
 	- [ ] Account for scaling for spritesheets of varying dimensions
 
-- [ ] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
+- [x] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
 	- [x] Create buttons
-	- [ ] Add functionality to buttons
+	- [x] Add functionality to buttons
 
 - [x] Label holes and balls
 
-- [ ] Validate move and check win
-	- [ ] Loss: a ball falls into the wrong hole
-		- [ ] Replace ball image with bottom-rightmost image in spritesheet
-		- [ ] Replace hole image with bottom-rightmost image in spritesheet
-		- [ ] Display "Game Over" message in a MessageBox
-		- [ ] Disable all control buttons
-		- [ ] Display "Restart" button (optional)
-	- [ ] Win: all balls are in the correct holes
-		- [ ] Display "You Won" message in a MessageBox
-		- [ ] Disable all control buttons
-		- [ ] Display "Restart" button (optional)
+- [x] Validate move and check win
+	- [x] Loss: a ball falls into the wrong hole
+		- [x] Replace ball image with bottom-rightmost image in spritesheet
+		- [x] Replace hole image with bottom-rightmost image in spritesheet
+		- [x] Display "Game Over" message in a MessageBox
+		- [x] Disable all control buttons
+		- [x] Display "Restart" button (optional)
+	- [x] Win: all balls are in the correct holes
+		- [x] Display "You Won" message in a MessageBox
+		- [x] Disable all control buttons
+		- [x] Display "Restart" button (optional)
