@@ -80,6 +80,7 @@ namespace csci321_assignment02
             // 
             // rightButton
             // 
+            this.rightButton.Enabled = false;
             this.rightButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rightButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rightButton.Location = new System.Drawing.Point(145, 185);
@@ -92,6 +93,7 @@ namespace csci321_assignment02
             // 
             // leftButton
             // 
+            this.leftButton.Enabled = false;
             this.leftButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.leftButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.leftButton.Location = new System.Drawing.Point(45, 185);
@@ -104,6 +106,7 @@ namespace csci321_assignment02
             // 
             // downButton
             // 
+            this.downButton.Enabled = false;
             this.downButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.downButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.downButton.Location = new System.Drawing.Point(95, 235);
@@ -116,6 +119,7 @@ namespace csci321_assignment02
             // 
             // upButton
             // 
+            this.upButton.Enabled = false;
             this.upButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upButton.Location = new System.Drawing.Point(95, 135);

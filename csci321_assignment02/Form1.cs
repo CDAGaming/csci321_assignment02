@@ -28,6 +28,47 @@ namespace csci321_assignment02
         int size;
         private GridBox[,] GameBoard;
 
+        private void ToggleControls(bool value)
+        {
+            upButton.Enabled = value;
+            downButton.Enabled = value;
+            leftButton.Enabled = value;
+            rightButton.Enabled = value;
+        }
+
+        private void ValidateGame(List<GridBox> arr)
+        {
+            // Check loss condition
+            for (int i = 0; i < arr.Count; i++)
+            {
+                if (arr[i].Item == -1)
+                {
+                    ToggleControls(false);
+                    initButton.Enabled = true;
+                    initButton.Text = "Restart";
+                    MessageBox.Show("Game Over");
+                    return;
+                }
+            }
+
+            // Check win condition
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (GameBoard[i, j].Item != 0)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            ToggleControls(false);
+            initButton.Enabled = true;
+            initButton.Text = "Restart";
+            MessageBox.Show("You Won!");
+        }
+
         private void RenderBox(List<GridBox> arr)
         {
             for (int i = 0; i < arr.Count; i++)
@@ -69,6 +110,7 @@ namespace csci321_assignment02
                 }
                 box.Image = bm;
             }
+            ValidateGame(arr);
         }
 
         private bool HasHoleNext(GridBox box)
@@ -354,6 +396,8 @@ namespace csci321_assignment02
 
         private void initButton_Click(object sender, EventArgs e)
         {
+            ToggleControls(true);
+            initButton.Text = "Game in progress";
             Button current = sender as Button;
             current.Enabled = false;
             string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
