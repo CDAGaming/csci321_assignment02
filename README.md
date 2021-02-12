@@ -7,11 +7,11 @@
 	- [x] puzzle.txt (data about how the game board should load on startup)
 	- [x] puzzle.jpg (image spritesheet; contains all possible state each grid on the game board can be in)
 
-- [ ] Create initial game board with data specified on data resource file
+- [x] Create initial game board with data specified on data resource file
 	- [x] Create 2D array of squares
 	- [x] Fill squares with corresponding image from spritesheet
 	- [x] Draw walls
-	- [ ] Account for scaling for spritesheets of varying dimensions
+	- [x] Account for scaling for spritesheets of varying dimensions; game rendered in the same aspect ratio as spritesheet
 
 - [x] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
 	- [x] Create buttons
