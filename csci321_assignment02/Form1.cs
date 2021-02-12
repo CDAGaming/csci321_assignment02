@@ -138,7 +138,7 @@ namespace csci321_assignment02
                             {
                                 break;
                             }
-                            if (!currBox.HasBottomWall()) //no wall; move
+                            if (!currBox.HasTopWall()) //no wall; move
                             {
                                 GridBox nextBox = GameBoard[currRow - 1, col];
                                 if (HasHoleNext(nextBox)) // has hole
@@ -400,7 +400,7 @@ namespace csci321_assignment02
             initButton.Text = "Game in progress";
             Button current = sender as Button;
             current.Enabled = false;
-            string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
+            string path = Environment.CurrentDirectory + "/" + "puzzleSwirl.txt";
             string[] lines = System.IO.File.ReadAllLines(path);
 
             // Counts of components
