@@ -35,6 +35,7 @@ namespace csci321_assignment02
             this.leftButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
             this.upButton = new System.Windows.Forms.Button();
+            this.OpenFileButton = new System.Windows.Forms.Button();
             this.controlBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,6 +52,7 @@ namespace csci321_assignment02
             // 
             // controlBox
             // 
+            this.controlBox.Controls.Add(this.OpenFileButton);
             this.controlBox.Controls.Add(this.rightButton);
             this.controlBox.Controls.Add(this.leftButton);
             this.controlBox.Controls.Add(this.downButton);
@@ -112,6 +114,17 @@ namespace csci321_assignment02
             this.upButton.UseVisualStyleBackColor = true;
             this.upButton.Click += new System.EventHandler(this.UpButton_Click);
             // 
+            // OpenFileButton
+            // 
+            this.OpenFileButton.Enabled = false;
+            this.OpenFileButton.Location = new System.Drawing.Point(6, 369);
+            this.OpenFileButton.Name = "OpenFileButton";
+            this.OpenFileButton.Size = new System.Drawing.Size(228, 45);
+            this.OpenFileButton.TabIndex = 4;
+            this.OpenFileButton.Text = "Open File";
+            this.OpenFileButton.UseVisualStyleBackColor = true;
+            this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButton_Click);
+            // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -126,6 +139,8 @@ namespace csci321_assignment02
             this.Name = "App";
             this.ShowIcon = false;
             this.Text = "CSCI 321 - Marble Game";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.App_FormClosing);
+            this.Load += new System.EventHandler(this.App_Load);
             this.controlBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -139,6 +154,7 @@ namespace csci321_assignment02
         private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.Button leftButton;
         private System.Windows.Forms.Button rightButton;
+        private System.Windows.Forms.Button OpenFileButton;
     }
 }
 

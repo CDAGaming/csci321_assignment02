@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -379,6 +380,32 @@ namespace csci321_assignment02
             }
 
             ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Black, ButtonBorderStyle.Solid);
+        }
+
+        private void App_Load(object sender, EventArgs e)
+        {
+            // When form is loaded, create an empty cache folder if not already present
+            // This folder will house mrb file data, primarily for image previews and data retrieval
+            // Format: cache/<mrb_file_name_no_exst>/<unzipped_files>
+            string cacheDir = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "cache";
+            if (!Directory.Exists(cacheDir))
+            {
+                Console.WriteLine("Cache directory not present, creating...");
+                Directory.CreateDirectory(cacheDir);
+            }
+            OpenFileButton.Enabled = true;
+        }
+
+        private void App_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // When form is closing, remove all files within the cache folder
+        }
+
+        private void OpenFileButton_Click(object sender, EventArgs e)
+        {
+            // Open the MarbleExplorer
+            MarbleExplorer explorer = new MarbleExplorer();
+            explorer.ShowDialog();
         }
 
         public Bitmap[,] ReadImageData(string name, int factor)
