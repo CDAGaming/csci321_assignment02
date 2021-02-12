@@ -216,7 +216,6 @@ namespace csci321_assignment02
 
         private void leftButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("LEFT clicked");
             List<GridBox> Updates = new List<GridBox>();
             for (int col = 1; col < size; col++)
             {
@@ -286,7 +285,71 @@ namespace csci321_assignment02
 
         private void rightButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("RIGHT clicked");
+            List<GridBox> Updates = new List<GridBox>();
+            for (int col = size - 2; col >= 0; col--)
+            {
+                for (int row = 0; row < size; row++)
+                {
+                    GridBox box = GameBoard[row, col];
+                    if (box.HasBall())
+                    {
+                        Updates.Add(box);
+                        int currCol = col;
+                        GridBox currBox;
+                        while (true)
+                        {
+                            currBox = GameBoard[row, currCol];
+                            if (currCol >= size - 1)
+                            {
+                                break;
+                            }
+                            if (!currBox.HasRightWall()) //no wall; move
+                            {
+                                GridBox nextBox = GameBoard[row, currCol + 1];
+                                if (HasHoleNext(nextBox)) // has hole
+                                {
+                                    if (nextBox.HoleNum == currBox.BallNum) // correct hole
+                                    {
+                                        currBox.Item = 0;
+                                        currBox.BallNum = 0;
+                                        nextBox.Item = 0;
+                                        nextBox.HoleNum = 0;
+                                        Updates.Add(nextBox);
+                                        break;
+                                    }
+                                    else // incorrect hole
+                                    {
+                                        currBox.Item = -1;
+                                        currBox.BallNum = 0;
+                                        nextBox.Item = -1;
+                                        nextBox.HoleNum = 0;
+                                        Updates.Add(nextBox);
+                                        break;
+                                    }
+                                }
+                                else if (nextBox.Item == 0) //empty
+                                {
+                                    nextBox.Item = 1;
+                                    nextBox.BallNum = currBox.BallNum;
+                                    currBox.Item = 0;
+                                    currBox.BallNum = 0;
+                                    currCol++;
+                                }
+                                else if (nextBox.Item == 1) // has ball
+                                {
+                                    break;
+                                }
+                            }
+                            else // wall on bottom
+                            {
+                                break;
+                            }
+                        }
+                        Updates.Add(currBox);
+                    }
+                }
+            }
+            RenderBox(Updates);
         }
 
         private void initButton_Click(object sender, EventArgs e)

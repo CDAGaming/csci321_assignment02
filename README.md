@@ -13,9 +13,9 @@
 	- [x] Draw walls
 	- [ ] Account for scaling for spritesheets of varying dimensions
 
-- [ ] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
+- [x] Create control buttons (up, down, left, and right) that will be displayed throughout the lifetime of the app
 	- [x] Create buttons
-	- [ ] Add functionality to buttons
+	- [x] Add functionality to buttons
 
 - [x] Label holes and balls
 
