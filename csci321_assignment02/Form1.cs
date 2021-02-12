@@ -18,7 +18,7 @@ namespace csci321_assignment02
         }
 
         // Variables
-        Image img = Image.FromFile("puzzle.jpg");
+        Image img = Image.FromFile("puzzleTall.jpg");
         int resWidth = 360;
         int resHeight = 360;
         int emptyXY = 0;
@@ -26,6 +26,7 @@ namespace csci321_assignment02
         int ballXY = 4;
         int errXY = 6;
         int size;
+        float ratio = 0;
         private GridBox[,] GameBoard;
 
         private void ToggleControls(bool value)
@@ -396,11 +397,12 @@ namespace csci321_assignment02
 
         private void initButton_Click(object sender, EventArgs e)
         {
+            gameBox.Controls.Clear();
             ToggleControls(true);
             initButton.Text = "Game in progress";
             Button current = sender as Button;
             current.Enabled = false;
-            string path = Environment.CurrentDirectory + "/" + "puzzleSwirl.txt";
+            string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
             string[] lines = System.IO.File.ReadAllLines(path);
 
             // Counts of components
@@ -410,9 +412,39 @@ namespace csci321_assignment02
             int holes = Convert.ToInt32(counts[1]);
             int walls = Convert.ToInt32(counts[2]);
 
+            // Scaling ratio for gameboard
+            if (img.Width >= img.Height)
+            {
+                if (img.Width >= resWidth)
+                {
+                    ratio = img.Width / resWidth;
+                }
+                else
+                {
+                    ratio = resWidth / img.Width;
+                }
+            }
+            else
+            {
+                if (img.Height >= resHeight)
+                {
+                    ratio = img.Height / resHeight;
+                }
+                else
+                {
+                    ratio = resHeight / img.Height;
+                }
+            }
+
             // Create gameboard (2D array of GridBox)
-            int gridHeight = resHeight / size;
-            int gridWidth = resWidth / size;
+            //int gridHeight = (resHeight / size);
+            //int gridWidth = (resWidth / size);
+            float gridWidth = img.Width / ratio / size;
+            float gridHeight = img.Height / ratio / size;
+            //Console.WriteLine(gridHeight);
+            //Console.WriteLine(gridWidth);
+            float marginTop = 20;
+            float marginLeft = 20;
             GameBoard = new GridBox[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -421,6 +453,8 @@ namespace csci321_assignment02
                     GameBoard[i, j] = new GridBox();
                     GameBoard[i, j].Row = i;
                     GameBoard[i, j].Col = j;
+                    //GameBoard[i, j].Width = (int)gridWidth;
+                    //GameBoard[i, j].Height = (int)gridHeight;
                     GameBoard[i, j].Item = 0;
                     GameBoard[i, j].WallCount = 0;
                     GameBoard[i, j].LeftWall = 0;
@@ -429,12 +463,15 @@ namespace csci321_assignment02
                     GameBoard[i, j].BottomWall = 0;
                     GameBoard[i, j].BallNum = 0;
                     GameBoard[i, j].HoleNum = 0;
-                    GameBoard[i, j].Location = new System.Drawing.Point(gridWidth * j + 20, gridHeight * i + 20);
+                    GameBoard[i, j].Location = new System.Drawing.Point((int)((gridWidth * j) + 20), (int)((gridHeight * i) + 20));
                     GameBoard[i, j].Name = "grid" + i.ToString() + j.ToString();
                     GameBoard[i, j].BackColor = System.Drawing.Color.Black;
-                    GameBoard[i, j].Size = new System.Drawing.Size(gridWidth, gridHeight);
+                    GameBoard[i, j].Size = new System.Drawing.Size((int)gridWidth, (int)gridHeight);
                     GameBoard[i, j].SizeMode = PictureBoxSizeMode.Normal;
                     gameBox.Controls.Add(GameBoard[i, j]);
+
+                    Console.WriteLine(GameBoard[i, j].Width);
+                    Console.WriteLine(GameBoard[i, j].Height);
                 }
             }
 
@@ -504,7 +541,7 @@ namespace csci321_assignment02
                 for (int j = 0; j < size; j++)
                 {
                     GridBox box = GameBoard[i, j];
-
+                    Console.WriteLine(box.Width.ToString());
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawWalls);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_WriteNum);
                     int pw = (img.Width / 7);
