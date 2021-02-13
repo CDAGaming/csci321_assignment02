@@ -76,7 +76,7 @@ namespace csci321_assignment02
             this.initButton.TabIndex = 4;
             this.initButton.Text = "Start Game";
             this.initButton.UseVisualStyleBackColor = true;
-            this.initButton.Click += new System.EventHandler(this.initButton_Click);
+            this.initButton.Click += new System.EventHandler(this.InitButton_Click);
             // 
             // rightButton
             // 
@@ -89,7 +89,7 @@ namespace csci321_assignment02
             this.rightButton.TabIndex = 3;
             this.rightButton.Text = "🠖";
             this.rightButton.UseVisualStyleBackColor = true;
-            this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
+            this.rightButton.Click += new System.EventHandler(this.RightButton_Click);
             // 
             // leftButton
             // 
@@ -102,7 +102,7 @@ namespace csci321_assignment02
             this.leftButton.TabIndex = 2;
             this.leftButton.Text = "🠔";
             this.leftButton.UseVisualStyleBackColor = true;
-            this.leftButton.Click += new System.EventHandler(this.leftButton_Click);
+            this.leftButton.Click += new System.EventHandler(this.LeftButton_Click);
             // 
             // downButton
             // 
@@ -115,7 +115,7 @@ namespace csci321_assignment02
             this.downButton.TabIndex = 1;
             this.downButton.Text = "🠗";
             this.downButton.UseVisualStyleBackColor = true;
-            this.downButton.Click += new System.EventHandler(this.downButton_Click);
+            this.downButton.Click += new System.EventHandler(this.DownButton_Click);
             // 
             // upButton
             // 
@@ -128,7 +128,7 @@ namespace csci321_assignment02
             this.upButton.TabIndex = 0;
             this.upButton.Text = "🠕";
             this.upButton.UseVisualStyleBackColor = true;
-            this.upButton.Click += new System.EventHandler(this.upButton_Click);
+            this.upButton.Click += new System.EventHandler(this.UpButton_Click);
             // 
             // App
             // 
