@@ -581,42 +581,43 @@ namespace csci321_assignment02
         public void GridBox_DrawWalls(object sender, PaintEventArgs e)
         {
             GridBox curr = sender as GridBox;
-            float wallWidth = 5;
+            float outerWallWidth = 10;
+            float innerWallWidth = 7.5f;
             PointF topLeft = new PointF(0, 0);
             PointF topRight = new PointF(curr.Width, 0);
             PointF bottomLeft = new PointF(0, curr.Height);
             PointF bottomRight = new PointF(curr.Width, curr.Height);
 
-            if (curr.LeftWall == 1)
+            if (curr.HasLeftWall() || curr.Col == 0)
             {
-                Pen pen = new Pen(Color.Red, wallWidth);
+                Pen pen = new Pen(Color.Red, curr.Col == 0 ? outerWallWidth : innerWallWidth);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, bottomLeft);
                 }
             }
 
-            if (curr.RightWall == 1)
+            if (curr.HasRightWall() || curr.Col == size - 1)
             {
-                Pen pen = new Pen(Color.Red, wallWidth);
+                Pen pen = new Pen(Color.Red, curr.Col == size - 1 ? outerWallWidth : innerWallWidth);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topRight, bottomRight);
                 }
             }
 
-            if (curr.TopWall == 1)
+            if (curr.HasTopWall() || curr.Row == 0)
             {
-                Pen pen = new Pen(Color.Red, wallWidth);
+                Pen pen = new Pen(Color.Red, curr.Row == 0 ? outerWallWidth : innerWallWidth);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, topLeft, topRight);
                 }
             }
 
-            if (curr.BottomWall == 1) 
+            if (curr.HasBottomWall() || curr.Row == size - 1)
             {
-                Pen pen = new Pen(Color.Red, wallWidth);
+                Pen pen = new Pen(Color.Red, curr.Row == size - 1 ? outerWallWidth : innerWallWidth);
                 using (pen)
                 {
                     e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
