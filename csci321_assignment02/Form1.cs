@@ -18,7 +18,7 @@ namespace csci321_assignment02
         }
 
         // Variables
-        Image img = Image.FromFile("puzzleTall.jpg");
+        Image img = Image.FromFile("puzzleWide.jpg");
         int resWidth = 360;
         int resHeight = 360;
         int emptyXY = 0;
@@ -413,36 +413,34 @@ namespace csci321_assignment02
             int walls = Convert.ToInt32(counts[2]);
 
             // Scaling ratio for gameboard
-            if (img.Width >= img.Height)
+            if (img.Width >= resWidth) // shrink original image
             {
-                if (img.Width >= resWidth)
+                if (img.Width >= img.Height) // shrink by width
                 {
-                    ratio = img.Width / resWidth;
+                    ratio = (float)img.Width / (float)resWidth;
                 }
-                else
+                else // shrink by height
                 {
-                    ratio = resWidth / img.Width;
+                    ratio = (float)img.Height / (float)resHeight;
                 }
             }
-            else
+            else // enlarge original image
             {
-                if (img.Height >= resHeight)
+                if (img.Width >= img.Height) // enlarge by width
                 {
-                    ratio = img.Height / resHeight;
+                    ratio = (float)resWidth / (float)img.Width;
                 }
-                else
+                else // enlarge by height
                 {
-                    ratio = resHeight / img.Height;
+                    ratio = (float)resHeight / (float)img.Height;
                 }
             }
 
             // Create gameboard (2D array of GridBox)
             //int gridHeight = (resHeight / size);
             //int gridWidth = (resWidth / size);
-            float gridWidth = img.Width / ratio / size;
-            float gridHeight = img.Height / ratio / size;
-            //Console.WriteLine(gridHeight);
-            //Console.WriteLine(gridWidth);
+            float gridWidth = img.Width / ratio / (float)size;
+            float gridHeight = img.Height / ratio / (float)size;
             float marginTop = 20;
             float marginLeft = 20;
             GameBoard = new GridBox[size, size];
@@ -453,8 +451,6 @@ namespace csci321_assignment02
                     GameBoard[i, j] = new GridBox();
                     GameBoard[i, j].Row = i;
                     GameBoard[i, j].Col = j;
-                    //GameBoard[i, j].Width = (int)gridWidth;
-                    //GameBoard[i, j].Height = (int)gridHeight;
                     GameBoard[i, j].Item = 0;
                     GameBoard[i, j].WallCount = 0;
                     GameBoard[i, j].LeftWall = 0;
@@ -463,15 +459,12 @@ namespace csci321_assignment02
                     GameBoard[i, j].BottomWall = 0;
                     GameBoard[i, j].BallNum = 0;
                     GameBoard[i, j].HoleNum = 0;
-                    GameBoard[i, j].Location = new System.Drawing.Point((int)((gridWidth * j) + 20), (int)((gridHeight * i) + 20));
+                    GameBoard[i, j].Location = new System.Drawing.Point((int)((gridWidth * j) + marginLeft), (int)((gridHeight * i) + marginTop));
                     GameBoard[i, j].Name = "grid" + i.ToString() + j.ToString();
                     GameBoard[i, j].BackColor = System.Drawing.Color.Black;
                     GameBoard[i, j].Size = new System.Drawing.Size((int)gridWidth, (int)gridHeight);
                     GameBoard[i, j].SizeMode = PictureBoxSizeMode.Normal;
                     gameBox.Controls.Add(GameBoard[i, j]);
-
-                    Console.WriteLine(GameBoard[i, j].Width);
-                    Console.WriteLine(GameBoard[i, j].Height);
                 }
             }
 
@@ -559,7 +552,7 @@ namespace csci321_assignment02
                     }
                     else if (box.Item == 1)
                     {
-                        Font f = new Font("Arial", 24.0f);
+                        Font f = new Font("Arial", 16.0f);
                         Brush by = new SolidBrush(Color.Yellow);
                         StringFormat sf = new StringFormat();
                         sf.LineAlignment = StringAlignment.Center;
@@ -642,7 +635,7 @@ namespace csci321_assignment02
 
             if (curr.HoleNum > 0)
             {
-                using (Font myFont = new Font("Arial", 24.0f))
+                using (Font myFont = new Font("Arial", 16.0f))
                 {
                     e.Graphics.DrawString(holeNum, myFont, brushYellow, r, drawFormat);
                 }
@@ -650,7 +643,7 @@ namespace csci321_assignment02
 
             if (curr.BallNum > 0)
             {
-                using (Font myFont = new Font("Arial", 24.0f))
+                using (Font myFont = new Font("Arial", 16.0f))
                 {
                     e.Graphics.DrawString(ballNum, myFont, brushYellow, r, drawFormat);
                 }
