@@ -18,7 +18,7 @@ namespace csci321_assignment02
         }
 
         // Variables
-        Image img = Image.FromFile("puzzleWide.jpg");
+        Image img = Image.FromFile("puzzle.jpg");
         int resWidth = 360;
         int resHeight = 360;
         int emptyXY = 0;
@@ -534,9 +534,9 @@ namespace csci321_assignment02
                 for (int j = 0; j < size; j++)
                 {
                     GridBox box = GameBoard[i, j];
-                    Console.WriteLine(box.Width.ToString());
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_DrawWalls);
                     box.Paint += new System.Windows.Forms.PaintEventHandler(this.GridBox_WriteNum);
+                    
                     int pw = (img.Width / 7);
                     int ph = (img.Height / 7);
 
