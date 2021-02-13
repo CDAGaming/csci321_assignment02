@@ -15,6 +15,7 @@ namespace csci321_assignment02
 {
     public partial class App : Form
     {
+        string cacheDirectory;
         Board board;
         Bitmap[,] imageData, boardRenderData;
         GridBox[,] GameBoard;
@@ -387,11 +388,11 @@ namespace csci321_assignment02
             // When form is loaded, create an empty cache folder if not already present
             // This folder will house mrb file data, primarily for image previews and data retrieval
             // Format: cache/<mrb_file_name_no_exst>/<unzipped_files>
-            string cacheDir = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "cache";
-            if (!Directory.Exists(cacheDir))
+            cacheDirectory = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "cache";
+            if (!Directory.Exists(cacheDirectory))
             {
                 Console.WriteLine("Cache directory not present, creating...");
-                Directory.CreateDirectory(cacheDir);
+                Directory.CreateDirectory(cacheDirectory);
             }
             OpenFileButton.Enabled = true;
         }
@@ -403,8 +404,8 @@ namespace csci321_assignment02
 
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
-            // Open the MarbleExplorer
-            MarbleExplorer explorer = new MarbleExplorer();
+            // Open the MarbleExplorer - TODO: Edit with return type
+            MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory);
             explorer.ShowDialog();
         }
 
