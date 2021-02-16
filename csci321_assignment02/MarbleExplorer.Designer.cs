@@ -83,6 +83,7 @@ namespace csci321_assignment02
             this.PathText.Size = new System.Drawing.Size(371, 20);
             this.PathText.TabIndex = 4;
             this.PathText.TextChanged += new System.EventHandler(this.PathText_TextChanged);
+            this.PathText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PathText_KeyDown);
             // 
             // ExploreButton
             // 

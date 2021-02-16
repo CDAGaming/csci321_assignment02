@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +16,13 @@ namespace csci321_assignment02
 {
     public partial class MarbleExplorer : Form
     {
-        private string filePath { get; set; }
+        private string filePath;
         private string exportDir = "";
         private bool isFile = false;
         private string currentlySelectedItemName = "";
         private string currentlySelectedItemPath = "";
+
+        public string returnDirectory { get; set; }
 
         public MarbleExplorer(string startingPath, string exportDir = null)
         {
@@ -31,15 +34,26 @@ namespace csci321_assignment02
         private void PathText_TextChanged(object sender, EventArgs e)
         {
             // This will trigger the view to refresh with new folder contents
-            filePath = PathText.Text;
-            LoadFilesAndDirectories();
+            if (!PathText.Focused)
+            {
+                filePath = PathText.Text;
+                LoadFilesAndDirectories();
+                UpdatePreviewData();
+            }
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
             // This will open the selected file to begin extraction and usage
-            filePath = currentlySelectedItemPath;
+            if (!isFile)
+            {
+                filePath = currentlySelectedItemPath;
+            }
             LoadFilesAndDirectories();
+
+            // Close after Resync
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void ExploreButton_Click(object sender, EventArgs e)
@@ -77,11 +91,9 @@ namespace csci321_assignment02
 
                 if (isFile)
                 {
-                    //string tempFilePath = filePath + "/" + currentlySelectedItemName;
                     FileInfo fileDetails = new FileInfo(currentlySelectedItemPath);
                     fileAttr = File.GetAttributes(currentlySelectedItemPath);
                     Console.WriteLine("Determining Action for: " + currentlySelectedItemPath);
-                    // TODO
                 }
                 else
                 {
@@ -149,7 +161,7 @@ namespace csci321_assignment02
             else
             {
                 isFile = true;
-                // Start Extraction for .mrb, if complicit
+                // Start Extraction for .mrb, if complicit - TODO
                 if (currentlySelectedItemPath.EndsWith(".mrb"))
                 {
                     // Stage 1: Identify whether the cache directory for this file exists
@@ -166,7 +178,8 @@ namespace csci321_assignment02
                         }
                     } else
                     {
-
+                        ZipFile.ExtractToDirectory(currentlySelectedItemPath, stagedDir);
+                        UpdatePreviewData(stagedDir);
                     }
                 } else
                 {
@@ -186,14 +199,83 @@ namespace csci321_assignment02
                 SizeLabel.Text = "Size: 0";
             } else
             {
-                // TODO
+                // Scaling Data
+                int resWidth = 250;
+                int resHeight = 250;
+                float ratio = 0;
+                Image returnImg = Image.FromFile(stagingDirectory + Path.DirectorySeparatorChar + "puzzle.jpg");
+
+                // Scaling ratio for gameboard
+                if (returnImg.Width >= resWidth) // shrink original image
+                {
+                    if (returnImg.Width >= returnImg.Height) // shrink by width
+                    {
+                        ratio = returnImg.Width / (float)resWidth;
+                    }
+                    else // shrink by height
+                    {
+                        ratio = returnImg.Height / (float)resHeight;
+                    }
+                }
+                else // enlarge original image
+                {
+                    if (returnImg.Width >= returnImg.Height) // enlarge by width
+                    {
+                        ratio = resWidth / (float)returnImg.Width;
+                    }
+                    else // enlarge by height
+                    {
+                        ratio = resHeight / (float)returnImg.Height;
+                    }
+                }
+                FilePreviewBox.Image = returnImg;
+                float gridWidth = returnImg.Width / ratio;
+                float gridHeight = returnImg.Height / ratio;
+                FilePreviewBox.Size = new Size((int)gridWidth, (int)gridHeight);
+                FilePreviewBox.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                int size = 0;
+                int balls = 0;
+                int walls = 0;
+
+                // Text Data Retrieval
+                try
+                {
+                    string[] lines = File.ReadAllLines(stagingDirectory + Path.DirectorySeparatorChar + "puzzle.txt");
+                    string[] counts = lines[0].Split(' ');
+                    // Counts of components
+                    size = Convert.ToInt32(counts[0]);
+                    balls = Convert.ToInt32(counts[1]);
+                    walls = Convert.ToInt32(counts[2]);
+                } catch (Exception)
+                {
+                    MessageBox.Show("Error: Unable to parse .mrb preview data, please verify archive condition.");
+                }
+
+                WallsLabel.Text = "Walls: " + walls;
+                BallsLabel.Text = "Balls: " + balls;
+                SizeLabel.Text = "Size: " + size;
             }
+            returnDirectory = stagingDirectory;
         }
 
         private void DataView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            filePath = currentlySelectedItemPath;
+            if (!isFile)
+            {
+                filePath = currentlySelectedItemPath;
+            }
             LoadFilesAndDirectories();
+        }
+
+        private void PathText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                filePath = PathText.Text;
+                LoadFilesAndDirectories();
+                UpdatePreviewData();
+            }
         }
     }
 }

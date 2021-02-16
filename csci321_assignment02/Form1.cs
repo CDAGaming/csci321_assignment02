@@ -16,6 +16,7 @@ namespace csci321_assignment02
         // Variables
         string cacheDirectory;
         Image img = null;
+        string dataPath = null;
         int size;
         float ratio = 0;
         private GridBox[,] GameBoard;
@@ -399,8 +400,8 @@ namespace csci321_assignment02
             initButton.Text = "Game in progress";
             Button current = sender as Button;
             current.Enabled = false;
-            string path = Environment.CurrentDirectory + "/" + "puzzle.txt";
-            string[] lines = System.IO.File.ReadAllLines(path);
+            string path = dataPath;
+            string[] lines = File.ReadAllLines(path);
 
             // Counts of components
             string[] counts = lines[0].Split(' ');
@@ -665,8 +666,25 @@ namespace csci321_assignment02
 
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
-            MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory);
-            explorer.ShowDialog();
+            string imgPath = null;
+            using (MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory))
+            {
+                DialogResult result = explorer.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    try
+                    {
+                        imgPath = explorer.returnDirectory + Path.DirectorySeparatorChar + "puzzle.jpg";
+                        img = Image.FromFile(imgPath);
+                        dataPath = explorer.returnDirectory + Path.DirectorySeparatorChar + "puzzle.txt";
+                    } catch (Exception)
+                    {
+                        MessageBox.Show("Unable to parse data in cached directory '" + explorer.returnDirectory + "' -- Please verify file and try again");
+                    }
+                }
+            }
+
+            initButton.Enabled = (img != null && imgPath != null && dataPath != null && File.Exists(dataPath) && File.Exists(imgPath));
         }
 
         private void App_Load(object sender, EventArgs e)
@@ -685,7 +703,11 @@ namespace csci321_assignment02
 
         private void App_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // When form is closing, remove all files within the cache folder
+            // When form is closing, remove all files within the cache folder and perform garbage collection
+            img = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             if (Directory.Exists(cacheDirectory))
             {
                 Directory.Delete(cacheDirectory, true);
