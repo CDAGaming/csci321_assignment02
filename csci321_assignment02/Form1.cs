@@ -660,6 +660,11 @@ namespace csci321_assignment02
         {
             ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Black, ButtonBorderStyle.Solid);
         }
-        
+
+        private void OpenFileButton_Click(object sender, EventArgs e)
+        {
+            MarbleExplorer explorer = new MarbleExplorer();
+            explorer.ShowDialog();
+        }
     }
 }

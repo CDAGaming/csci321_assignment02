@@ -1,4 +1,4 @@
-﻿
+
 namespace csci321_assignment02
 {
     partial class App
@@ -36,12 +36,13 @@ namespace csci321_assignment02
             this.leftButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
             this.upButton = new System.Windows.Forms.Button();
+            this.OpenFileButton = new System.Windows.Forms.Button();
             this.controlBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // gameBox
             // 
-            this.gameBox.Font = new System.Drawing.Font("Liberation Mono", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameBox.ForeColor = System.Drawing.Color.LimeGreen;
             this.gameBox.Location = new System.Drawing.Point(12, 20);
             this.gameBox.Name = "gameBox";
@@ -57,7 +58,8 @@ namespace csci321_assignment02
             this.controlBox.Controls.Add(this.leftButton);
             this.controlBox.Controls.Add(this.downButton);
             this.controlBox.Controls.Add(this.upButton);
-            this.controlBox.Font = new System.Drawing.Font("Liberation Mono", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.controlBox.Controls.Add(this.OpenFileButton);
+            this.controlBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.controlBox.ForeColor = System.Drawing.Color.LimeGreen;
             this.controlBox.Location = new System.Drawing.Point(427, 20);
             this.controlBox.Name = "controlBox";
@@ -68,9 +70,10 @@ namespace csci321_assignment02
             // 
             // initButton
             // 
-            this.initButton.Font = new System.Drawing.Font("Liberation Mono", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.initButton.Enabled = false;
+            this.initButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.initButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.initButton.Location = new System.Drawing.Point(6, 367);
+            this.initButton.Location = new System.Drawing.Point(6, 25);
             this.initButton.Name = "initButton";
             this.initButton.Size = new System.Drawing.Size(228, 47);
             this.initButton.TabIndex = 4;
@@ -81,7 +84,7 @@ namespace csci321_assignment02
             // rightButton
             // 
             this.rightButton.Enabled = false;
-            this.rightButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rightButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rightButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rightButton.Location = new System.Drawing.Point(145, 185);
             this.rightButton.Name = "rightButton";
@@ -94,7 +97,7 @@ namespace csci321_assignment02
             // leftButton
             // 
             this.leftButton.Enabled = false;
-            this.leftButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.leftButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.leftButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.leftButton.Location = new System.Drawing.Point(45, 185);
             this.leftButton.Name = "leftButton";
@@ -107,7 +110,7 @@ namespace csci321_assignment02
             // downButton
             // 
             this.downButton.Enabled = false;
-            this.downButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.downButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.downButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.downButton.Location = new System.Drawing.Point(95, 235);
             this.downButton.Name = "downButton";
@@ -120,7 +123,7 @@ namespace csci321_assignment02
             // upButton
             // 
             this.upButton.Enabled = false;
-            this.upButton.Font = new System.Drawing.Font("Liberation Mono", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.upButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.upButton.Location = new System.Drawing.Point(95, 135);
             this.upButton.Name = "upButton";
@@ -130,16 +133,32 @@ namespace csci321_assignment02
             this.upButton.UseVisualStyleBackColor = true;
             this.upButton.Click += new System.EventHandler(this.UpButton_Click);
             // 
+            // OpenFileButton
+            // 
+            this.OpenFileButton.Enabled = false;
+            this.OpenFileButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenFileButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.OpenFileButton.Location = new System.Drawing.Point(6, 369);
+            this.OpenFileButton.Name = "OpenFileButton";
+            this.OpenFileButton.Size = new System.Drawing.Size(228, 45);
+            this.OpenFileButton.TabIndex = 4;
+            this.OpenFileButton.Text = "Open File";
+            this.OpenFileButton.UseVisualStyleBackColor = true;
+            this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButton_Click);
+            // 
             // App
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.ClientSize = new System.Drawing.Size(684, 461);
+            this.ClientSize = new System.Drawing.Size(680, 457);
             this.Controls.Add(this.controlBox);
             this.Controls.Add(this.gameBox);
-            this.Font = new System.Drawing.Font("Liberation Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "App";
+            this.ShowIcon = false;
             this.Text = "CSCI321 Assignment 02 - Marble Game";
             this.controlBox.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -151,6 +170,7 @@ namespace csci321_assignment02
         private System.Windows.Forms.GroupBox gameBox;
         private System.Windows.Forms.GroupBox controlBox;
         private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.Button OpenFileButton;
         private System.Windows.Forms.Button downButton;
         private System.Windows.Forms.Button leftButton;
         private System.Windows.Forms.Button rightButton;
