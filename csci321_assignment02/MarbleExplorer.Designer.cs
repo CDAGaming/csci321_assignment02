@@ -32,17 +32,16 @@ namespace csci321_assignment02
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MarbleExplorer));
             this.BackButton = new System.Windows.Forms.Button();
-            this.ForwardButton = new System.Windows.Forms.Button();
             this.OpenButton = new System.Windows.Forms.Button();
             this.PathLabel = new System.Windows.Forms.Label();
             this.PathText = new System.Windows.Forms.TextBox();
             this.ExploreButton = new System.Windows.Forms.Button();
             this.FilePreviewBox = new System.Windows.Forms.PictureBox();
             this.DataView = new System.Windows.Forms.ListView();
+            this.iconList = new System.Windows.Forms.ImageList(this.components);
             this.SizeLabel = new System.Windows.Forms.Label();
             this.BallsLabel = new System.Windows.Forms.Label();
             this.WallsLabel = new System.Windows.Forms.Label();
-            this.iconList = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.FilePreviewBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,24 +49,15 @@ namespace csci321_assignment02
             // 
             this.BackButton.Location = new System.Drawing.Point(12, 7);
             this.BackButton.Name = "BackButton";
-            this.BackButton.Size = new System.Drawing.Size(46, 23);
+            this.BackButton.Size = new System.Drawing.Size(100, 23);
             this.BackButton.TabIndex = 0;
-            this.BackButton.Text = "<<";
+            this.BackButton.Text = "Up One Level";
             this.BackButton.UseVisualStyleBackColor = true;
             this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
-            // ForwardButton
-            // 
-            this.ForwardButton.Location = new System.Drawing.Point(64, 7);
-            this.ForwardButton.Name = "ForwardButton";
-            this.ForwardButton.Size = new System.Drawing.Size(46, 23);
-            this.ForwardButton.TabIndex = 1;
-            this.ForwardButton.Text = ">>";
-            this.ForwardButton.UseVisualStyleBackColor = true;
-            this.ForwardButton.Click += new System.EventHandler(this.ForwardButton_Click);
-            // 
             // OpenButton
             // 
+            this.OpenButton.Enabled = false;
             this.OpenButton.Location = new System.Drawing.Point(596, 7);
             this.OpenButton.Name = "OpenButton";
             this.OpenButton.Size = new System.Drawing.Size(75, 23);
@@ -115,12 +105,21 @@ namespace csci321_assignment02
             // DataView
             // 
             this.DataView.HideSelection = false;
+            this.DataView.LargeImageList = this.iconList;
             this.DataView.Location = new System.Drawing.Point(262, 35);
             this.DataView.Name = "DataView";
             this.DataView.Size = new System.Drawing.Size(409, 250);
-            this.DataView.SmallImageList = this.iconList;
             this.DataView.TabIndex = 8;
             this.DataView.UseCompatibleStateImageBehavior = false;
+            this.DataView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.DataView_ItemSelectionChanged);
+            this.DataView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DataView_MouseDoubleClick);
+            // 
+            // iconList
+            // 
+            this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconList.ImageStream")));
+            this.iconList.TransparentColor = System.Drawing.Color.Transparent;
+            this.iconList.Images.SetKeyName(0, "marble.png");
+            this.iconList.Images.SetKeyName(1, "folder-invoices.png");
             // 
             // SizeLabel
             // 
@@ -152,13 +151,6 @@ namespace csci321_assignment02
             this.WallsLabel.TabIndex = 11;
             this.WallsLabel.Text = "Walls: 0";
             // 
-            // iconList
-            // 
-            this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconList.ImageStream")));
-            this.iconList.TransparentColor = System.Drawing.Color.Transparent;
-            this.iconList.Images.SetKeyName(0, "folder.png");
-            this.iconList.Images.SetKeyName(1, "marble.png");
-            // 
             // MarbleExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -174,7 +166,6 @@ namespace csci321_assignment02
             this.Controls.Add(this.PathText);
             this.Controls.Add(this.PathLabel);
             this.Controls.Add(this.OpenButton);
-            this.Controls.Add(this.ForwardButton);
             this.Controls.Add(this.BackButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -191,7 +182,6 @@ namespace csci321_assignment02
         #endregion
 
         private System.Windows.Forms.Button BackButton;
-        private System.Windows.Forms.Button ForwardButton;
         private System.Windows.Forms.Button OpenButton;
         private System.Windows.Forms.Label PathLabel;
         private System.Windows.Forms.TextBox PathText;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace csci321_assignment02
@@ -13,16 +14,17 @@ namespace csci321_assignment02
         }
 
         // Variables
-        Image img = Image.FromFile("puzzle.jpg");
+        string cacheDirectory;
+        Image img = null;
         int size;
         float ratio = 0;
         private GridBox[,] GameBoard;
 
         // Preset Data for 7 factor image
-        int emptyXY = 0;
-        int holeXY = 2;
-        int ballXY = 4;
-        int errXY = 6;
+        readonly int emptyXY = 0;
+        readonly int holeXY = 2;
+        readonly int ballXY = 4;
+        readonly int errXY = 6;
 
         private void ToggleControls(bool value)
         {
@@ -663,8 +665,31 @@ namespace csci321_assignment02
 
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
-            MarbleExplorer explorer = new MarbleExplorer();
+            MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory);
             explorer.ShowDialog();
+        }
+
+        private void App_Load(object sender, EventArgs e)
+        {
+            // When form is loaded, create an empty cache folder if not already present
+            // This folder will house mrb file data, primarily for image previews and data retrieval
+            // Format: cache/<mrb_file_name_no_exst>/<unzipped_files>
+            cacheDirectory = Environment.CurrentDirectory + Path.DirectorySeparatorChar + "cache";
+            if (!Directory.Exists(cacheDirectory))
+            {
+                Console.WriteLine("Cache directory not present, creating...");
+                Directory.CreateDirectory(cacheDirectory);
+            }
+            OpenFileButton.Enabled = true;
+        }
+
+        private void App_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // When form is closing, remove all files within the cache folder
+            if (Directory.Exists(cacheDirectory))
+            {
+                Directory.Delete(cacheDirectory, true);
+            }
         }
     }
 }

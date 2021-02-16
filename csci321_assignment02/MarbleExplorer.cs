@@ -16,18 +16,21 @@ namespace csci321_assignment02
     public partial class MarbleExplorer : Form
     {
         private string filePath { get; set; }
+        private string exportDir = "";
         private bool isFile = false;
         private string currentlySelectedItemName = "";
+        private string currentlySelectedItemPath = "";
 
-        public MarbleExplorer(string startingPath)
+        public MarbleExplorer(string startingPath, string exportDir = null)
         {
             InitializeComponent();
+            this.exportDir = exportDir ?? startingPath;
             filePath = PathText.Text = startingPath;
         }
 
         private void PathText_TextChanged(object sender, EventArgs e)
         {
-            // This will trigger the browser to refresh with new folder contents
+            // This will trigger the view to refresh with new folder contents
             filePath = PathText.Text;
             LoadFilesAndDirectories();
         }
@@ -35,7 +38,8 @@ namespace csci321_assignment02
         private void OpenButton_Click(object sender, EventArgs e)
         {
             // This will open the selected file to begin extraction and usage
-            //Console.WriteLine("Line: " + GetSelectedText());
+            filePath = currentlySelectedItemPath;
+            LoadFilesAndDirectories();
         }
 
         private void ExploreButton_Click(object sender, EventArgs e)
@@ -45,24 +49,18 @@ namespace csci321_assignment02
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = PathText.Text = fbd.SelectedPath;
+                    isFile = false;
+                    PathText.Text = fbd.SelectedPath;
                 }
             }
         }
 
-        private void OpenTargetFile(string folderPath)
-        {
-            // TODO
-        }
-
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // TODO
-        }
-
-        private void ForwardButton_Click(object sender, EventArgs e)
-        {
-            // TODO
+            // Go to Parent Directory, if possible
+            isFile = false;
+            PathText.Text = Directory.GetParent(PathText.Text).FullName;
+            LoadFilesAndDirectories();
         }
 
         private void MarbleExplorer_Load(object sender, EventArgs e)
@@ -73,24 +71,22 @@ namespace csci321_assignment02
         public void LoadFilesAndDirectories()
         {
             DirectoryInfo fileList;
-            string tempFilePath = "";
             FileAttributes fileAttr;
             try
             {
 
                 if (isFile)
                 {
-                    tempFilePath = filePath + "/" + currentlySelectedItemName;
-                    FileInfo fileDetails = new FileInfo(tempFilePath);
-                    //fileNameLabel.Text = fileDetails.Name;
-                    //fileTypeLabel.Text = fileDetails.Extension;
-                    fileAttr = File.GetAttributes(tempFilePath);
-                    Process.Start(tempFilePath);
+                    //string tempFilePath = filePath + "/" + currentlySelectedItemName;
+                    FileInfo fileDetails = new FileInfo(currentlySelectedItemPath);
+                    fileAttr = File.GetAttributes(currentlySelectedItemPath);
+                    Console.WriteLine("Determining Action for: " + currentlySelectedItemPath);
+                    // TODO
                 }
                 else
                 {
                     fileAttr = File.GetAttributes(filePath);
-
+                    PathText.Text = filePath;
                 }
 
                 if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -106,20 +102,12 @@ namespace csci321_assignment02
                         fileExtension = files[i].Extension.ToUpper();
                         switch (fileExtension)
                         {
-                            /*case ".PNG":
-                            case ".JPG":
-                            case ".JPEG":
-                                DataView.Items.Add(files[i].Name, 9);
-                                break;
-                            case ".TXT":
-                                DataView.Items.Add(files[i].Name, 2);
-                                break;*/
                             case ".MRB":
-                                DataView.Items.Add(files[i].Name, 1);
+                                DataView.Items.Add(files[i].Name, 0);
                                 break;
 
                             default:
-                                //DataView.Items.Add(files[i].Name, 8);
+                                //DataView.Items.Add(files[i].Name, Icon.ExtractAssociatedIcon(files[i].Name));
                                 break;
                         }
 
@@ -127,7 +115,7 @@ namespace csci321_assignment02
 
                     for (int i = 0; i < dirs.Length; i++)
                     {
-                        DataView.Items.Add(dirs[i].Name, 0);
+                        DataView.Items.Add(dirs[i].Name, 1);
                     }
                 }
                 else
@@ -139,6 +127,73 @@ namespace csci321_assignment02
             {
                 // TODO
             }
+
+            // Form Updates, if needed
+            if (Directory.GetParent(filePath) == null)
+            {
+                BackButton.Enabled = false;
+            }
+        }
+
+        private void DataView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            currentlySelectedItemName = e.Item.Text;
+            currentlySelectedItemPath = filePath + "/" + currentlySelectedItemName;
+
+            FileAttributes fileAttr = File.GetAttributes(currentlySelectedItemPath);
+            if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                isFile = false;
+                UpdatePreviewData();
+            }
+            else
+            {
+                isFile = true;
+                // Start Extraction for .mrb, if complicit
+                if (currentlySelectedItemPath.EndsWith(".mrb"))
+                {
+                    // Stage 1: Identify whether the cache directory for this file exists
+                    // - If so, we remove this directory if it contains no files, but parse through it if it does
+                    string stagedDir = exportDir + Path.DirectorySeparatorChar + currentlySelectedItemName.Replace(".mrb", "");
+                    if (Directory.Exists(stagedDir))
+                    {
+                        if (Directory.GetFiles(stagedDir) == null)
+                        {
+                            Directory.Delete(stagedDir);
+                        } else
+                        {
+                            UpdatePreviewData(stagedDir);
+                        }
+                    } else
+                    {
+
+                    }
+                } else
+                {
+                    UpdatePreviewData();
+                }
+            }
+            OpenButton.Enabled = isFile;
+        }
+
+        private void UpdatePreviewData(string stagingDirectory = null)
+        {
+            if (stagingDirectory == null)
+            {
+                FilePreviewBox.Image = null;
+                WallsLabel.Text = "Walls: 0";
+                BallsLabel.Text = "Balls: 0";
+                SizeLabel.Text = "Size: 0";
+            } else
+            {
+                // TODO
+            }
+        }
+
+        private void DataView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            filePath = currentlySelectedItemPath;
+            LoadFilesAndDirectories();
         }
     }
 }
