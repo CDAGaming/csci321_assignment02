@@ -17,7 +17,7 @@ namespace csci321_assignment02
     public partial class MarbleExplorer : Form
     {
         private string filePath;
-        private string exportDir = "";
+        private readonly string exportDir = "";
         private bool isFile = false;
         private string currentlySelectedItemName = "";
         private string currentlySelectedItemPath = "";
@@ -51,9 +51,12 @@ namespace csci321_assignment02
             }
             LoadFilesAndDirectories();
 
-            // Close after Resync
-            DialogResult = DialogResult.OK;
-            Close();
+            if (isFile)
+            {
+                // Close after Resync
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
 
         private void ExploreButton_Click(object sender, EventArgs e)
@@ -94,6 +97,14 @@ namespace csci321_assignment02
                     FileInfo fileDetails = new FileInfo(currentlySelectedItemPath);
                     fileAttr = File.GetAttributes(currentlySelectedItemPath);
                     Console.WriteLine("Determining Action for: " + currentlySelectedItemPath);
+                    if (currentlySelectedItemPath.EndsWith(".mrb"))
+                    {
+                        Console.WriteLine(".mrb File detected; Assume Extracted and using cached data");
+                        Console.WriteLine("Cached Directory: " + returnDirectory);
+                        // Close after Resync
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
                 }
                 else
                 {
@@ -137,7 +148,7 @@ namespace csci321_assignment02
             }
             catch (Exception e)
             {
-                // TODO
+                Console.WriteLine("An exception has occured: " + e.Message);
             }
 
             // Form Updates, if needed
@@ -153,7 +164,7 @@ namespace csci321_assignment02
             currentlySelectedItemPath = filePath + "/" + currentlySelectedItemName;
 
             FileAttributes fileAttr = File.GetAttributes(currentlySelectedItemPath);
-            if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
+            if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory || !e.IsSelected)
             {
                 isFile = false;
                 UpdatePreviewData();
@@ -161,7 +172,7 @@ namespace csci321_assignment02
             else
             {
                 isFile = true;
-                // Start Extraction for .mrb, if complicit - TODO
+                // Start Extraction for .mrb, if complicit
                 if (currentlySelectedItemPath.EndsWith(".mrb"))
                 {
                     // Stage 1: Identify whether the cache directory for this file exists
@@ -186,7 +197,7 @@ namespace csci321_assignment02
                     UpdatePreviewData();
                 }
             }
-            OpenButton.Enabled = isFile;
+            OpenButton.Enabled = e.IsSelected;
         }
 
         private void UpdatePreviewData(string stagingDirectory = null)
@@ -202,9 +213,9 @@ namespace csci321_assignment02
                 // Scaling Data
                 int resWidth = 250;
                 int resHeight = 250;
-                float ratio = 0;
                 Image returnImg = Image.FromFile(stagingDirectory + Path.DirectorySeparatorChar + "puzzle.jpg");
 
+                float ratio;
                 // Scaling ratio for gameboard
                 if (returnImg.Width >= resWidth) // shrink original image
                 {

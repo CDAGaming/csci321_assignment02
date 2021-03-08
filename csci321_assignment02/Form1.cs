@@ -411,8 +411,9 @@ namespace csci321_assignment02
             int walls = Convert.ToInt32(counts[2]);
 
             // Scaling Data
-            int resWidth = 360;
-            int resHeight = 360;
+            Console.WriteLine("Max Render Size: " + gameBox.Size.Width + ", " + gameBox.Size.Height);
+            int resWidth = gameBox.Size.Width - (gameBox.Size.Width / 3); // Max width is 2/3 the gameBox width
+            int resHeight = gameBox.Size.Height - (gameBox.Size.Height / 3); // Max height is 2/3 the gameBox height
 
             // Scaling ratio for gameboard
             if (img.Width >= resWidth) // shrink original image
@@ -683,8 +684,9 @@ namespace csci321_assignment02
                     }
                 }
             }
-
-            initButton.Enabled = (img != null && imgPath != null && dataPath != null && File.Exists(dataPath) && File.Exists(imgPath));
+            bool verifiedData = (img != null && imgPath != null && dataPath != null && File.Exists(dataPath) && File.Exists(imgPath));
+            initButton.Enabled = verifiedData || initButton.Enabled;
+            initButton.Text = verifiedData ? "Start New Game" : initButton.Text;
         }
 
         private void App_Load(object sender, EventArgs e)
@@ -711,6 +713,109 @@ namespace csci321_assignment02
             if (Directory.Exists(cacheDirectory))
             {
                 Directory.Delete(cacheDirectory, true);
+            }
+        }
+
+        private void App_ResizeEnd(object sender, EventArgs e)
+        {
+            if (img != null && GameBoard != null)
+            {
+                gameBox.Controls.Clear();
+                // Scaling Data
+                Console.WriteLine("Max Render Size: " + gameBox.Size.Width + ", " + gameBox.Size.Height);
+                int resWidth = gameBox.Size.Width - (gameBox.Size.Width / 3); // Max width is 2/3 the gameBox width
+                int resHeight = gameBox.Size.Height - (gameBox.Size.Height / 3); // Max height is 2/3 the gameBox height
+
+                // Scaling ratio for gameboard
+                if (img.Width >= resWidth) // shrink original image
+                {
+                    if (img.Width >= img.Height) // shrink by width
+                    {
+                        ratio = img.Width / (float)resWidth;
+                    }
+                    else // shrink by height
+                    {
+                        ratio = img.Height / (float)resHeight;
+                    }
+                }
+                else // enlarge original image
+                {
+                    if (img.Width >= img.Height) // enlarge by width
+                    {
+                        ratio = resWidth / (float)img.Width;
+                    }
+                    else // enlarge by height
+                    {
+                        ratio = resHeight / (float)img.Height;
+                    }
+                }
+
+                // Sync gameboard (2D array of GridBox)
+                float gridWidth = img.Width / ratio / size;
+                float gridHeight = img.Height / ratio / size;
+                float marginTop = 20;
+                float marginLeft = 20;
+                GridBox emptyBox = new GridBox();
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        GameBoard[i, j] = GameBoard[i, j];
+                        GameBoard[i, j].Location = new Point((int)((gridWidth * j) + marginLeft), (int)((gridHeight * i) + marginTop));
+                        GameBoard[i, j].Size = new Size((int)gridWidth, (int)gridHeight);
+                        gameBox.Controls.Add(GameBoard[i, j]);
+                    }
+                }
+
+                // Render board
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        GridBox box = GameBoard[i, j];
+                        box.Paint += new PaintEventHandler(GridBox_DrawWalls);
+                        box.Paint += new PaintEventHandler(GridBox_WriteNum);
+                        box.Paint += new PaintEventHandler(GridBox_DrawBorder);
+
+                        int pw = img.Width / 7;
+                        int ph = img.Height / 7;
+
+                        Bitmap bm = new Bitmap(box.Width, box.Height);
+                        Rectangle r = new Rectangle(0, 0, box.Width, box.Height);
+
+                        if (box.Item == 0)
+                        {
+                            using (Graphics g = Graphics.FromImage(bm))
+                            {
+                                g.DrawImage(img, r, pw * emptyXY, ph * emptyXY, pw, ph, GraphicsUnit.Pixel);
+                            }
+                        }
+                        else if (box.Item == 1)
+                        {
+                            Font f = new Font("Arial", 16.0f);
+                            Brush by = new SolidBrush(Color.Yellow);
+                            StringFormat sf = new StringFormat
+                            {
+                                LineAlignment = StringAlignment.Center,
+                                Alignment = StringAlignment.Center
+                            };
+                            string text = box.BallNum.ToString();
+                            using (Graphics g = Graphics.FromImage(bm))
+                            {
+                                g.DrawImage(img, r, pw * ballXY, ph * ballXY, pw, ph, GraphicsUnit.Pixel);
+                                g.DrawString(text, f, by, r, sf);
+                            }
+                        }
+                        else if (box.Item == 2)
+                        {
+                            using (Graphics g = Graphics.FromImage(bm))
+                            {
+                                g.DrawImage(img, r, pw * holeXY, ph * holeXY, pw, ph, GraphicsUnit.Pixel);
+                            }
+                        }
+                        box.Image = bm;
+                    }
+                }
             }
         }
     }
