@@ -11,6 +11,7 @@ namespace csci321_assignment02
         public App()
         {
             InitializeComponent();
+            timerObj.syncWithCurrentTime = false;
         }
 
         // Variables
@@ -65,7 +66,8 @@ namespace csci321_assignment02
             ToggleControls(false);
             initButton.Enabled = true;
             initButton.Text = "Restart";
-            MessageBox.Show("You Won!");
+            MessageBox.Show("You Won in " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with 0 Move(s)");
+            // TODO: SAVE DATA
         }
 
         private void RenderBox(List<GridBox> arr)
@@ -405,19 +407,27 @@ namespace csci321_assignment02
                     gameBox.Visible = true;
                     ToggleControls(true);
                     initButton.Text = "Pause Game";
+                    timerObj.ResetTiming();
+                    timerObj.StartTiming();
                     break;
                 case "Pause Game":
                     ToggleControls(false);
                     gameBox.Visible = false;
                     initButton.Text = "Resume Game";
+                    timerObj.PauseTiming();
                     break;
                 case "Resume Game":
                     ToggleControls(true);
                     gameBox.Visible = true;
                     initButton.Text = "Pause Game";
+                    timerObj.StartTiming();
                     break;
                 default:
-                    initButton.Text = "Start Game";
+                    initButton.Text = "UNKNOWN_STATE";
+                    initButton.Enabled = false;
+                    ToggleControls(false);
+                    gameBox.Visible = false;
+                    timerObj.PauseTiming();
                     break;
             }
 
@@ -425,7 +435,6 @@ namespace csci321_assignment02
             {
                 return;
             }
-
 
             string path = dataPath;
             string[] lines = File.ReadAllLines(path);
