@@ -395,11 +395,38 @@ namespace csci321_assignment02
 
         private void InitButton_Click(object sender, EventArgs e)
         {
-            gameBox.Controls.Clear();
-            ToggleControls(true);
-            initButton.Text = "Game in progress";
-            Button current = sender as Button;
-            current.Enabled = false;
+            string originalText = initButton.Text;
+            switch (originalText)
+            {
+                case "Start Game":
+                case "Restart":
+                case "Start New Game":
+                    gameBox.Controls.Clear();
+                    gameBox.Visible = true;
+                    ToggleControls(true);
+                    initButton.Text = "Pause Game";
+                    break;
+                case "Pause Game":
+                    ToggleControls(false);
+                    gameBox.Visible = false;
+                    initButton.Text = "Resume Game";
+                    break;
+                case "Resume Game":
+                    ToggleControls(true);
+                    gameBox.Visible = true;
+                    initButton.Text = "Pause Game";
+                    break;
+                default:
+                    initButton.Text = "Start Game";
+                    break;
+            }
+
+            if (originalText == "Pause Game" || originalText == "Resume Game")
+            {
+                return;
+            }
+
+
             string path = dataPath;
             string[] lines = File.ReadAllLines(path);
 
