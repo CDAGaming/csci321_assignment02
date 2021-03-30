@@ -40,6 +40,8 @@ namespace csci321_assignment02
             this.downButton = new System.Windows.Forms.Button();
             this.upButton = new System.Windows.Forms.Button();
             this.OpenFileButton = new System.Windows.Forms.Button();
+            this.nameLbl = new System.Windows.Forms.Label();
+            this.playerName = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.controlBox.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +82,8 @@ namespace csci321_assignment02
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlBox.AutoSize = true;
+            this.controlBox.Controls.Add(this.playerName);
+            this.controlBox.Controls.Add(this.nameLbl);
             this.controlBox.Controls.Add(this.timerObj);
             this.controlBox.Controls.Add(this.highScores);
             this.controlBox.Controls.Add(this.initButton);
@@ -99,10 +103,10 @@ namespace csci321_assignment02
             // 
             // timerObj
             // 
-            this.timerObj.Location = new System.Drawing.Point(23, 275);
+            this.timerObj.Location = new System.Drawing.Point(11, 269);
             this.timerObj.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.timerObj.Name = "timerObj";
-            this.timerObj.Size = new System.Drawing.Size(209, 159);
+            this.timerObj.Size = new System.Drawing.Size(241, 135);
             this.timerObj.TabIndex = 6;
             // 
             // highScores
@@ -112,8 +116,11 @@ namespace csci321_assignment02
             this.highScores.Location = new System.Drawing.Point(9, 442);
             this.highScores.Multiline = true;
             this.highScores.Name = "highScores";
+            this.highScores.ReadOnly = true;
             this.highScores.Size = new System.Drawing.Size(241, 118);
             this.highScores.TabIndex = 5;
+            this.highScores.Text = "No Scores Available";
+            this.highScores.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // initButton
             // 
@@ -122,7 +129,7 @@ namespace csci321_assignment02
             this.initButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.initButton.Location = new System.Drawing.Point(9, 25);
             this.initButton.Name = "initButton";
-            this.initButton.Size = new System.Drawing.Size(234, 40);
+            this.initButton.Size = new System.Drawing.Size(241, 40);
             this.initButton.TabIndex = 4;
             this.initButton.Text = "Start Game";
             this.initButton.UseVisualStyleBackColor = true;
@@ -133,7 +140,7 @@ namespace csci321_assignment02
             this.rightButton.Enabled = false;
             this.rightButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rightButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.rightButton.Location = new System.Drawing.Point(149, 167);
+            this.rightButton.Location = new System.Drawing.Point(156, 167);
             this.rightButton.Name = "rightButton";
             this.rightButton.Size = new System.Drawing.Size(50, 50);
             this.rightButton.TabIndex = 3;
@@ -146,7 +153,7 @@ namespace csci321_assignment02
             this.leftButton.Enabled = false;
             this.leftButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.leftButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.leftButton.Location = new System.Drawing.Point(49, 167);
+            this.leftButton.Location = new System.Drawing.Point(56, 167);
             this.leftButton.Name = "leftButton";
             this.leftButton.Size = new System.Drawing.Size(50, 50);
             this.leftButton.TabIndex = 2;
@@ -159,7 +166,7 @@ namespace csci321_assignment02
             this.downButton.Enabled = false;
             this.downButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.downButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.downButton.Location = new System.Drawing.Point(99, 217);
+            this.downButton.Location = new System.Drawing.Point(106, 217);
             this.downButton.Name = "downButton";
             this.downButton.Size = new System.Drawing.Size(50, 50);
             this.downButton.TabIndex = 1;
@@ -172,7 +179,7 @@ namespace csci321_assignment02
             this.upButton.Enabled = false;
             this.upButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.upButton.Location = new System.Drawing.Point(99, 117);
+            this.upButton.Location = new System.Drawing.Point(106, 117);
             this.upButton.Name = "upButton";
             this.upButton.Size = new System.Drawing.Size(50, 50);
             this.upButton.TabIndex = 0;
@@ -187,11 +194,27 @@ namespace csci321_assignment02
             this.OpenFileButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.OpenFileButton.Location = new System.Drawing.Point(9, 71);
             this.OpenFileButton.Name = "OpenFileButton";
-            this.OpenFileButton.Size = new System.Drawing.Size(234, 40);
+            this.OpenFileButton.Size = new System.Drawing.Size(241, 40);
             this.OpenFileButton.TabIndex = 4;
             this.OpenFileButton.Text = "Open File";
             this.OpenFileButton.UseVisualStyleBackColor = true;
             this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButton_Click);
+            // 
+            // nameLbl
+            // 
+            this.nameLbl.AutoSize = true;
+            this.nameLbl.Location = new System.Drawing.Point(6, 415);
+            this.nameLbl.Name = "nameLbl";
+            this.nameLbl.Size = new System.Drawing.Size(55, 20);
+            this.nameLbl.TabIndex = 7;
+            this.nameLbl.Text = "Name:";
+            // 
+            // playerName
+            // 
+            this.playerName.Location = new System.Drawing.Point(67, 412);
+            this.playerName.Name = "playerName";
+            this.playerName.Size = new System.Drawing.Size(183, 26);
+            this.playerName.TabIndex = 8;
             // 
             // App
             // 
@@ -230,6 +253,8 @@ namespace csci321_assignment02
         private System.Windows.Forms.GroupBox gameBox;
         private System.Windows.Forms.TextBox highScores;
         private IPControl3.Clock timerObj;
+        private System.Windows.Forms.TextBox playerName;
+        private System.Windows.Forms.Label nameLbl;
     }
 }
 

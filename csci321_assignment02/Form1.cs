@@ -46,6 +46,7 @@ namespace csci321_assignment02
                     ToggleControls(false);
                     timerObj.PauseTiming();
                     initButton.Enabled = true;
+                    playerName.Enabled = true;
                     initButton.Text = "Restart";
                     MessageBox.Show("Game Over! You lasted " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
                     return;
@@ -67,6 +68,7 @@ namespace csci321_assignment02
             ToggleControls(false);
             timerObj.PauseTiming();
             initButton.Enabled = true;
+            playerName.Enabled = true;
             initButton.Text = "Restart";
             MessageBox.Show("You Won in " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
             // TODO: SAVE DATA TO PUZZLE.BIN
@@ -412,6 +414,7 @@ namespace csci321_assignment02
                     gameBox.Controls.Clear();
                     gameBox.Visible = true;
                     moves = 0;
+                    playerName.Enabled = false;
                     ToggleControls(true);
                     initButton.Text = "Pause Game";
                     timerObj.ResetTiming();
@@ -432,6 +435,7 @@ namespace csci321_assignment02
                 default:
                     initButton.Text = "UNKNOWN_STATE";
                     initButton.Enabled = false;
+                    playerName.Enabled = false;
                     ToggleControls(false);
                     gameBox.Visible = false;
                     moves = 0;
@@ -714,6 +718,7 @@ namespace csci321_assignment02
             string imgPath = null;
             // TODO: In MarbleExplorer, Create a blank puzzle.bin file if not present or if first-existent line is not in correct format
             // Two new return fields needed: mrbPath and scorePath
+            // mrbPath stored for later use, scorePath used to parse a list of scores
             using (MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory))
             {
                 DialogResult result = explorer.ShowDialog();
