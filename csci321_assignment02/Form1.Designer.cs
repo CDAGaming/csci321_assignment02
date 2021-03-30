@@ -32,6 +32,8 @@ namespace csci321_assignment02
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.gameBox = new System.Windows.Forms.GroupBox();
             this.controlBox = new System.Windows.Forms.GroupBox();
+            this.playerName = new System.Windows.Forms.TextBox();
+            this.nameLbl = new System.Windows.Forms.Label();
             this.timerObj = new IPControl3.Clock();
             this.highScores = new System.Windows.Forms.TextBox();
             this.initButton = new System.Windows.Forms.Button();
@@ -40,8 +42,6 @@ namespace csci321_assignment02
             this.downButton = new System.Windows.Forms.Button();
             this.upButton = new System.Windows.Forms.Button();
             this.OpenFileButton = new System.Windows.Forms.Button();
-            this.nameLbl = new System.Windows.Forms.Label();
-            this.playerName = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.controlBox.SuspendLayout();
             this.SuspendLayout();
@@ -101,6 +101,22 @@ namespace csci321_assignment02
             this.controlBox.TabStop = false;
             this.controlBox.Text = "Controls";
             // 
+            // playerName
+            // 
+            this.playerName.Location = new System.Drawing.Point(67, 412);
+            this.playerName.Name = "playerName";
+            this.playerName.Size = new System.Drawing.Size(183, 26);
+            this.playerName.TabIndex = 8;
+            // 
+            // nameLbl
+            // 
+            this.nameLbl.AutoSize = true;
+            this.nameLbl.Location = new System.Drawing.Point(6, 415);
+            this.nameLbl.Name = "nameLbl";
+            this.nameLbl.Size = new System.Drawing.Size(55, 20);
+            this.nameLbl.TabIndex = 7;
+            this.nameLbl.Text = "Name:";
+            // 
             // timerObj
             // 
             this.timerObj.Location = new System.Drawing.Point(11, 269);
@@ -117,6 +133,7 @@ namespace csci321_assignment02
             this.highScores.Multiline = true;
             this.highScores.Name = "highScores";
             this.highScores.ReadOnly = true;
+            this.highScores.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.highScores.Size = new System.Drawing.Size(241, 118);
             this.highScores.TabIndex = 5;
             this.highScores.Text = "No Scores Available";
@@ -199,22 +216,6 @@ namespace csci321_assignment02
             this.OpenFileButton.Text = "Open File";
             this.OpenFileButton.UseVisualStyleBackColor = true;
             this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButton_Click);
-            // 
-            // nameLbl
-            // 
-            this.nameLbl.AutoSize = true;
-            this.nameLbl.Location = new System.Drawing.Point(6, 415);
-            this.nameLbl.Name = "nameLbl";
-            this.nameLbl.Size = new System.Drawing.Size(55, 20);
-            this.nameLbl.TabIndex = 7;
-            this.nameLbl.Text = "Name:";
-            // 
-            // playerName
-            // 
-            this.playerName.Location = new System.Drawing.Point(67, 412);
-            this.playerName.Name = "playerName";
-            this.playerName.Size = new System.Drawing.Size(183, 26);
-            this.playerName.TabIndex = 8;
             // 
             // App
             // 

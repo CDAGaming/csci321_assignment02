@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 namespace csci321_assignment02
@@ -17,16 +20,105 @@ namespace csci321_assignment02
         // Variables
         string cacheDirectory;
         Image img = null;
-        string dataPath = null;
+        string dataPath = null, lastScorePath = null, lastMrbPath = null;
         int size, moves = 0;
         float ratio = 0;
         private GridBox[,] GameBoard;
+        private List<Highscore> latestScores = new List<Highscore>();
 
         // Preset Data for 7 factor image
         readonly int emptyXY = 0;
         readonly int holeXY = 2;
         readonly int ballXY = 4;
         readonly int errXY = 6;
+
+        // SCORING DATA START
+
+        private List<Highscore> ReadScoresFromFile(string path, bool isSerializedData)
+        {
+            latestScores = new List<Highscore>();
+
+            if (isSerializedData)
+            {
+                try
+                {
+                    using (Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                    {
+                        BinaryFormatter bin = new BinaryFormatter();
+                        var score = bin.Deserialize(stream);
+                        if (score.GetType() == typeof(Highscore))
+                        {
+                            latestScores.Add((Highscore)score);
+                        }
+                        else if (score.GetType() == typeof(List<Highscore>))
+                        {
+                            latestScores = ((List<Highscore>)score);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Incorrect Data Type for score data: {0}", score.GetType());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed to retrieve score data: {0}", ex);
+                }
+            }
+            else
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string line;
+                    while (!reader.EndOfStream)
+                    {
+                        line = reader.ReadLine();
+                        try
+                        {
+                            latestScores.Add(new Highscore(line));
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            Console.WriteLine("Invalid score at line \"{0}\": {1}", line, ex);
+                        }
+                    }
+                }
+            }
+
+            return SortAndPositionHighscores(latestScores);
+        }
+
+        static List<Highscore> SortAndPositionHighscores(List<Highscore> scores)
+        {
+            scores = scores.OrderByDescending(s => s.Score).ThenByDescending(s => s.Time).ToList();
+
+            int pos = 1;
+
+            scores.ForEach(s => s.Position = pos++);
+
+            return scores.ToList();
+        }
+
+        // Function to pad an integer number 
+        // with leading zeros
+        static string padNumber(int N, int P)
+        {
+            // string used in Format() method
+            string s = "{0:";
+            for (int i = 0; i < P; i++)
+            {
+                s += "0";
+            }
+            s += "}";
+
+            // use of string.Format() method
+            string value = string.Format(s, N);
+
+            // return output
+            return value;
+        }
+
+        // SCORING DATA END
 
         private void ToggleControls(bool value)
         {
@@ -38,6 +130,7 @@ namespace csci321_assignment02
 
         private void ValidateGame(List<GridBox> arr)
         {
+            string timestamp = padNumber(timerObj.currentHour, 2) + ":" + padNumber(timerObj.currentMinute, 2) + ":" + padNumber(timerObj.currentSeconds, 2);
             // Check loss condition
             for (int i = 0; i < arr.Count; i++)
             {
@@ -48,7 +141,7 @@ namespace csci321_assignment02
                     initButton.Enabled = true;
                     playerName.Enabled = true;
                     initButton.Text = "Restart";
-                    MessageBox.Show("Game Over! You lasted " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
+                    MessageBox.Show("Game Over! You lasted " + timestamp + " with " + moves + " move(s)");
                     return;
                 }
             }
@@ -70,8 +163,32 @@ namespace csci321_assignment02
             initButton.Enabled = true;
             playerName.Enabled = true;
             initButton.Text = "Restart";
-            MessageBox.Show("You Won in " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
-            // TODO: SAVE DATA TO PUZZLE.BIN
+            MessageBox.Show("You Won in " + timestamp + " with " + moves + " move(s)");
+
+            // Save Data in Highscores and Refresh Layout
+            Highscore newScore = new Highscore(playerName.Text + " " + moves + " " + timestamp);
+            latestScores.Add(newScore);
+
+            using (Stream stream = new FileStream(lastScorePath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, latestScores);
+            }
+
+            // Save Scores to ZIP File
+            MarbleExplorer.AddFilesToZip(lastMrbPath, new[] { lastScorePath });
+
+            // Read Data Copied from MarbleExplorer End Event
+            latestScores = ReadScoresFromFile(lastScorePath, true);
+            if (latestScores.Any())
+            {
+                highScores.Text = "Scores" + Environment.NewLine;
+                latestScores.ForEach(s => highScores.Text += s + Environment.NewLine);
+            }
+            else
+            {
+                highScores.Text = "No Scores Available";
+            }
         }
 
         private void RenderBox(List<GridBox> arr)
@@ -405,6 +522,12 @@ namespace csci321_assignment02
 
         private void InitButton_Click(object sender, EventArgs e)
         {
+            bool nameValid = playerName.Text.Any(x => char.IsLetter(x));
+            if (!nameValid)
+            {
+                MessageBox.Show("Pleas enter a valid name to continue...");
+                return;
+            }
             string originalText = initButton.Text;
             switch (originalText)
             {
@@ -588,7 +711,7 @@ namespace csci321_assignment02
                     box.Paint += new PaintEventHandler(GridBox_DrawWalls);
                     box.Paint += new PaintEventHandler(GridBox_WriteNum);
                     box.Paint += new PaintEventHandler(GridBox_DrawBorder);
-                    
+
                     int pw = img.Width / 7;
                     int ph = img.Height / 7;
 
@@ -716,9 +839,6 @@ namespace csci321_assignment02
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
             string imgPath = null;
-            // TODO: In MarbleExplorer, Create a blank puzzle.bin file if not present or if first-existent line is not in correct format
-            // Two new return fields needed: mrbPath and scorePath
-            // mrbPath stored for later use, scorePath used to parse a list of scores
             using (MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory))
             {
                 DialogResult result = explorer.ShowDialog();
@@ -727,9 +847,31 @@ namespace csci321_assignment02
                     try
                     {
                         imgPath = explorer.returnDirectory + Path.DirectorySeparatorChar + "puzzle.jpg";
+                        lastScorePath = explorer.returnDirectory + Path.DirectorySeparatorChar + "puzzle.bin";
+                        lastMrbPath = explorer.currentlySelectedItemPath;
                         img = Image.FromFile(imgPath);
                         dataPath = explorer.returnDirectory + Path.DirectorySeparatorChar + "puzzle.txt";
-                    } catch (Exception)
+
+                        // Parse Score Data if available
+                        if (File.Exists(lastScorePath))
+                        {
+                            latestScores = ReadScoresFromFile(lastScorePath, true);
+                            if (latestScores.Any())
+                            {
+                                highScores.Text = "Scores" + Environment.NewLine;
+                                latestScores.ForEach(s => highScores.Text += s + Environment.NewLine);
+                            }
+                            else
+                            {
+                                highScores.Text = "No Scores Available";
+                            }
+                        }
+                        else
+                        {
+                            highScores.Text = "No Scores Available";
+                        }
+                    }
+                    catch (Exception)
                     {
                         MessageBox.Show("Unable to parse data in cached directory '" + explorer.returnDirectory + "' -- Please verify file and try again");
                     }
@@ -868,6 +1010,42 @@ namespace csci321_assignment02
                     }
                 }
             }
+        }
+    }
+
+    // SCORING DATA
+    [Serializable]
+    class Highscore
+    {
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public int Score { get; set; }
+        public string Time { get; set; }
+
+        public Highscore(string data)
+        {
+            var d = data.Split(' ');
+
+            if (string.IsNullOrEmpty(data) || d.Length < 3)
+                throw new ArgumentException("Invalid high score string", data);
+
+            Name = d[0];
+
+            if (int.TryParse(d[1], out int num))
+            {
+                Score = num;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid score", "data");
+            }
+
+            Time = d[2];
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}. {1}: {2} ({3})", Position, Name, Score, Time);
         }
     }
 }

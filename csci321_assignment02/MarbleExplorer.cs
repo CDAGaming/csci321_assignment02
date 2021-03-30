@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace csci321_assignment02
@@ -20,7 +12,7 @@ namespace csci321_assignment02
         private readonly string exportDir = "";
         private bool isFile = false;
         private string currentlySelectedItemName = "";
-        private string currentlySelectedItemPath = "";
+        public string currentlySelectedItemPath = "";
 
         public string returnDirectory { get; set; }
 
@@ -183,16 +175,19 @@ namespace csci321_assignment02
                         if (Directory.GetFiles(stagedDir) == null)
                         {
                             Directory.Delete(stagedDir);
-                        } else
+                        }
+                        else
                         {
                             UpdatePreviewData(stagedDir);
                         }
-                    } else
+                    }
+                    else
                     {
                         ZipFile.ExtractToDirectory(currentlySelectedItemPath, stagedDir);
                         UpdatePreviewData(stagedDir);
                     }
-                } else
+                }
+                else
                 {
                     UpdatePreviewData();
                 }
@@ -208,7 +203,8 @@ namespace csci321_assignment02
                 WallsLabel.Text = "Walls: 0";
                 BallsLabel.Text = "Balls: 0";
                 SizeLabel.Text = "Size: 0";
-            } else
+            }
+            else
             {
                 // Scaling Data
                 int resWidth = 250;
@@ -258,7 +254,8 @@ namespace csci321_assignment02
                     size = Convert.ToInt32(counts[0]);
                     balls = Convert.ToInt32(counts[1]);
                     walls = Convert.ToInt32(counts[2]);
-                } catch (Exception)
+                }
+                catch (Exception)
                 {
                     MessageBox.Show("Error: Unable to parse .mrb preview data, please verify archive condition.");
                 }
@@ -286,6 +283,25 @@ namespace csci321_assignment02
                 filePath = PathText.Text;
                 LoadFilesAndDirectories();
                 UpdatePreviewData();
+            }
+        }
+
+        public static void AddFilesToZip(string zipPath, string[] files)
+        {
+            if (files == null || files.Length == 0)
+            {
+                return;
+            }
+
+            using (var zipArchive = ZipFile.Open(zipPath, ZipArchiveMode.Update))
+            {
+                foreach (var file in files)
+                {
+                    var fileInfo = new FileInfo(file);
+                    ZipArchiveEntry oldEntry = zipArchive.GetEntry(fileInfo.Name);
+                    if (oldEntry != null) oldEntry.Delete();
+                    zipArchive.CreateEntryFromFile(fileInfo.FullName, fileInfo.Name);
+                }
             }
         }
     }
