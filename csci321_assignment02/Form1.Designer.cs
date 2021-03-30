@@ -228,7 +228,7 @@ namespace csci321_assignment02
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "App";
             this.ShowIcon = false;
-            this.Text = "CSCI321 Assignment 04 - Marble Game";
+            this.Text = "CSCI321 Assignment 05 - Marble Game";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.App_FormClosing);
             this.Load += new System.EventHandler(this.App_Load);
             this.ResizeEnd += new System.EventHandler(this.App_ResizeEnd);
