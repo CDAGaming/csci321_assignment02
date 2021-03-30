@@ -18,7 +18,7 @@ namespace csci321_assignment02
         string cacheDirectory;
         Image img = null;
         string dataPath = null;
-        int size;
+        int size, moves = 0;
         float ratio = 0;
         private GridBox[,] GameBoard;
 
@@ -44,9 +44,10 @@ namespace csci321_assignment02
                 if (arr[i].Item == -1)
                 {
                     ToggleControls(false);
+                    timerObj.PauseTiming();
                     initButton.Enabled = true;
                     initButton.Text = "Restart";
-                    MessageBox.Show("Game Over");
+                    MessageBox.Show("Game Over! You lasted " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
                     return;
                 }
             }
@@ -64,10 +65,11 @@ namespace csci321_assignment02
             }
 
             ToggleControls(false);
+            timerObj.PauseTiming();
             initButton.Enabled = true;
             initButton.Text = "Restart";
-            MessageBox.Show("You Won in " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with 0 Move(s)");
-            // TODO: SAVE DATA
+            MessageBox.Show("You Won in " + timerObj.currentHour + ":" + timerObj.currentMinute + ":" + timerObj.currentSeconds + " with " + moves + " move(s)");
+            // TODO: SAVE DATA TO PUZZLE.BIN
         }
 
         private void RenderBox(List<GridBox> arr)
@@ -186,6 +188,7 @@ namespace csci321_assignment02
                 }
             }
             RenderBox(Updates);
+            moves += 1;
         }
 
         private void DownButton_Click(object sender, EventArgs e)
@@ -255,6 +258,7 @@ namespace csci321_assignment02
                 }
             }
             RenderBox(Updates);
+            moves += 1;
         }
 
         private void LeftButton_Click(object sender, EventArgs e)
@@ -324,6 +328,7 @@ namespace csci321_assignment02
                 }
             }
             RenderBox(Updates);
+            moves += 1;
         }
 
         private void RightButton_Click(object sender, EventArgs e)
@@ -393,6 +398,7 @@ namespace csci321_assignment02
                 }
             }
             RenderBox(Updates);
+            moves += 1;
         }
 
         private void InitButton_Click(object sender, EventArgs e)
@@ -405,6 +411,7 @@ namespace csci321_assignment02
                 case "Start New Game":
                     gameBox.Controls.Clear();
                     gameBox.Visible = true;
+                    moves = 0;
                     ToggleControls(true);
                     initButton.Text = "Pause Game";
                     timerObj.ResetTiming();
@@ -427,6 +434,7 @@ namespace csci321_assignment02
                     initButton.Enabled = false;
                     ToggleControls(false);
                     gameBox.Visible = false;
+                    moves = 0;
                     timerObj.PauseTiming();
                     break;
             }
@@ -704,6 +712,8 @@ namespace csci321_assignment02
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
             string imgPath = null;
+            // TODO: In MarbleExplorer, Create a blank puzzle.bin file if not present or if first-existent line is not in correct format
+            // Two new return fields needed: mrbPath and scorePath
             using (MarbleExplorer explorer = new MarbleExplorer(Environment.CurrentDirectory, cacheDirectory))
             {
                 DialogResult result = explorer.ShowDialog();
