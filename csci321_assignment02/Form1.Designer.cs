@@ -34,7 +34,7 @@ namespace csci321_assignment02
             this.controlBox = new System.Windows.Forms.GroupBox();
             this.playerName = new System.Windows.Forms.TextBox();
             this.nameLbl = new System.Windows.Forms.Label();
-            this.timerObj = new IPControl3.Clock();
+            this.timerObj = new CustomControlSuite.Clock();
             this.highScores = new System.Windows.Forms.TextBox();
             this.initButton = new System.Windows.Forms.Button();
             this.rightButton = new System.Windows.Forms.Button();
@@ -253,7 +253,7 @@ namespace csci321_assignment02
         private System.Windows.Forms.Button OpenFileButton;
         private System.Windows.Forms.GroupBox gameBox;
         private System.Windows.Forms.TextBox highScores;
-        private IPControl3.Clock timerObj;
+        private CustomControlSuite.Clock timerObj;
         private System.Windows.Forms.TextBox playerName;
         private System.Windows.Forms.Label nameLbl;
     }
