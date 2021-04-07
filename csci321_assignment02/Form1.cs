@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomControlSuite;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -90,7 +91,7 @@ namespace csci321_assignment02
 
         static List<Highscore> SortAndPositionHighscores(List<Highscore> scores)
         {
-            scores = scores.OrderByDescending(s => s.Score).ThenByDescending(s => s.Time).ToList();
+            scores = scores.OrderBy(s => s.Score).ThenBy(s => s.Time).ToList();
 
             int pos = 1;
 
@@ -101,7 +102,7 @@ namespace csci321_assignment02
 
         // Function to pad an integer number 
         // with leading zeros
-        static string padNumber(int N, int P)
+        static string PadNumber(int N, int P)
         {
             // string used in Format() method
             string s = "{0:";
@@ -130,7 +131,7 @@ namespace csci321_assignment02
 
         private void ValidateGame(List<GridBox> arr)
         {
-            string timestamp = padNumber(timerObj.currentHour, 2) + ":" + padNumber(timerObj.currentMinute, 2) + ":" + padNumber(timerObj.currentSeconds, 2);
+            string timestamp = PadNumber(timerObj.currentHour, 2) + ":" + PadNumber(timerObj.currentMinute, 2) + ":" + PadNumber(timerObj.currentSeconds, 2);
             // Check loss condition
             for (int i = 0; i < arr.Count; i++)
             {

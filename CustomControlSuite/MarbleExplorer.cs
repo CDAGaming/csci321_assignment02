@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows.Forms;
 
-namespace csci321_assignment02
+namespace CustomControlSuite
 {
     public partial class MarbleExplorer : Form
     {

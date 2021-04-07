@@ -1,5 +1,5 @@
 ﻿
-namespace csci321_assignment02
+namespace CustomControlSuite
 {
     partial class MarbleExplorer
     {
